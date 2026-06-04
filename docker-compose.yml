@@ -1,0 +1,12 @@
+services:
+  petstore:
+    build:
+      context: .
+      dockerfile: docker/payara-petstore/Dockerfile
+    container_name: petstore-payara
+    ports:
+      - "8080:8080"
+      - "4848:4848"
+    environment:
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: admin

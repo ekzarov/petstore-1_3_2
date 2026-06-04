@@ -1,0 +1,7 @@
+.git
+docker-compose.override.yml
+**/build
+**/target
+**/.classpath
+**/.project
+**/.settings
