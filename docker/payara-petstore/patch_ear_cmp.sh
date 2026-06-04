@@ -35,11 +35,20 @@ for module in "$@"; do
   fi
 
   rm -rf descriptor
-  mkdir -p descriptor/META-INF
-  cp "${descriptor}" descriptor/META-INF/glassfish-ejb-jar.xml
-
-  echo "[PetStore] Adding Payara runtime descriptor ${descriptor} to ${module}"
-  (cd descriptor && jar uf "../${module}" META-INF/glassfish-ejb-jar.xml)
+  case "${module}" in
+    *.war)
+      mkdir -p descriptor/WEB-INF
+      cp "${descriptor}" descriptor/WEB-INF/glassfish-web.xml
+      echo "[PetStore] Adding Payara web runtime descriptor ${descriptor} to ${module}"
+      (cd descriptor && jar uf "../${module}" WEB-INF/glassfish-web.xml)
+      ;;
+    *)
+      mkdir -p descriptor/META-INF
+      cp "${descriptor}" descriptor/META-INF/glassfish-ejb-jar.xml
+      echo "[PetStore] Adding Payara EJB runtime descriptor ${descriptor} to ${module}"
+      (cd descriptor && jar uf "../${module}" META-INF/glassfish-ejb-jar.xml)
+      ;;
+  esac
 done
 
 rm -rf descriptor

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<glassfish-web-app>
+  <resource-ref>
+    <res-ref-name>jdbc/CatalogDB</res-ref-name>
+    <jndi-name>jdbc/petstore/PetStoreDB</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>url/CatalogDAOSQLURL</res-ref-name>
+    <jndi-name>http://localhost:8080/petstore/CatalogDAOSQL.xml</jndi-name>
+  </resource-ref>
+</glassfish-web-app>

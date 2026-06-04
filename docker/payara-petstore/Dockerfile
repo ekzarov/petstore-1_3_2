@@ -15,7 +15,7 @@ RUN chmod +x /opt/payara/scripts/init_0_patch_h2_cmp.sh \
     /opt/payara/scripts/init_0_create_jms_resources.sh \
     /opt/payara/patch_ear_cmp.sh \
   && /opt/payara/patch_ear_cmp.sh /opt/payara/deployments/petstore.ear jdbc/petstore/PetStoreDB \
-    customer-ejb.jar signon-ejb.jar uidgen-ejb.jar asyncsender-ejb.jar \
+    customer-ejb.jar signon-ejb.jar uidgen-ejb.jar asyncsender-ejb.jar catalog-ejb.jar petstore.war \
   && /opt/payara/patch_ear_cmp.sh /opt/payara/deployments/opc.ear jdbc/opc/OPCDB \
     opc-ejb.jar po-ejb.jar processmanager-ejb.jar mailer-ejb.jar \
   && /opt/payara/patch_ear_cmp.sh /opt/payara/deployments/supplier.ear jdbc/supplier/SupplierDB \

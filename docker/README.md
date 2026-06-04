@@ -15,6 +15,14 @@ Open:
 http://localhost:8080/petstore
 ```
 
+After starting with a fresh Docker volume, load the demo catalog and supplier
+inventory data once:
+
+```text
+http://localhost:8080/petstore/Populate
+http://localhost:8080/supplier/Populate
+```
+
 Payara admin console:
 
 ```text
