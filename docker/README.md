@@ -25,14 +25,29 @@ password: admin
 
 ## Current Scope
 
-The image deploys only `petstore.ear`.
+The image deploys only `petstore.ear` by default.
 
-`opc.ear` and `supplier.ear` need separate datasource/CMP configuration before
-they can be deployed together because their CMP entity tables currently collide
-in Payara's default H2 database.
+`opc.ear` and `supplier.ear` are copied into the image and patched with
+Payara-compatible CMP datasource descriptors, but they are not deployed by
+default yet:
+
+```text
+/opt/payara/petstore-ears/opc.ear
+/opt/payara/petstore-ears/supplier.ear
+```
+
+The image creates separate H2 JDBC resources for the legacy application
+databases:
+
+```text
+jdbc/petstore/PetStoreDB
+jdbc/opc/OPCDB
+jdbc/supplier/SupplierDB
+```
 
 JMS resources also still need to be created for the complete order-processing
-flow.
+flow. Without those resources, `supplier.ear` currently fails on MDB startup
+with `MDB destination not specified`.
 
 ## Why The Patch Exists
 
@@ -40,3 +55,8 @@ Payara 5.2021.1 uses H2 as its default database, but its legacy EJB CMP code
 generator does not ship an `H2.properties` mapping resource. The init script
 adds `H2.properties` based on Payara's bundled `SQL92.properties`, matching the
 manual smoke test that successfully deployed `petstore.ear`.
+
+The prebuilt PetStore EARs contain old `sun-j2ee-ri.xml` descriptors. Payara 5
+does not use their `<cmpresource>` entries, so the Docker build injects
+`META-INF/glassfish-ejb-jar.xml` into CMP EJB modules to point each application
+area at its own JDBC resource.
