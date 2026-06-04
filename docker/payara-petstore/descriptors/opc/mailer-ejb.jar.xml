@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-ejb-jar PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 EJB 3.1//EN" "http://glassfish.org/dtds/glassfish-ejb-jar_3_1-1.dtd">
+<glassfish-ejb-jar>
+  <enterprise-beans>
+    <ejb>
+      <ejb-name>MailerMDB</ejb-name>
+      <jndi-name>jms/opc/MailQueue</jndi-name>
+      <resource-ref>
+        <res-ref-name>mail/MailSession</res-ref-name>
+        <jndi-name>mail/opc/MailSession</jndi-name>
+      </resource-ref>
+      <mdb-connection-factory>
+        <jndi-name>jms/opc/QueueConnectionFactory</jndi-name>
+      </mdb-connection-factory>
+    </ejb>
+    <cmp-resource>
+      <jndi-name>jdbc/opc/OPCDB</jndi-name>
+      <create-tables-at-deploy>true</create-tables-at-deploy>
+      <drop-tables-at-undeploy>true</drop-tables-at-undeploy>
+      <database-vendor-name>h2</database-vendor-name>
+    </cmp-resource>
+  </enterprise-beans>
+</glassfish-ejb-jar>

@@ -23,17 +23,21 @@ user: admin
 password: admin
 ```
 
-## Current Scope
-
-The image deploys only `petstore.ear` by default.
-
-`opc.ear` and `supplier.ear` are copied into the image and patched with
-Payara-compatible CMP datasource descriptors, but they are not deployed by
-default yet:
+Admin console:
 
 ```text
-/opt/payara/petstore-ears/opc.ear
-/opt/payara/petstore-ears/supplier.ear
+http://localhost:8080/admin
+```
+
+## Current Scope
+
+The image deploys the prebuilt legacy EARs by default:
+
+```text
+petstore.ear
+opc.ear
+supplier.ear
+petstoreadmin.ear
 ```
 
 The image creates separate H2 JDBC resources for the legacy application
@@ -45,9 +49,8 @@ jdbc/opc/OPCDB
 jdbc/supplier/SupplierDB
 ```
 
-JMS resources also still need to be created for the complete order-processing
-flow. Without those resources, `supplier.ear` currently fails on MDB startup
-with `MDB destination not specified`.
+The image also creates the JMS queues, topic, connection factories, and JavaMail
+session needed by the order-processing, supplier, and admin flows.
 
 ## Why The Patch Exists
 
@@ -60,3 +63,7 @@ The prebuilt PetStore EARs contain old `sun-j2ee-ri.xml` descriptors. Payara 5
 does not use their `<cmpresource>` entries, so the Docker build injects
 `META-INF/glassfish-ejb-jar.xml` into CMP EJB modules to point each application
 area at its own JDBC resource.
+
+The same injection step adds Payara runtime mappings for legacy JMS MDB
+destinations and AsyncSender resources that were originally described only in
+`sun-j2ee-ri.xml`.
