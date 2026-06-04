@@ -9,6 +9,10 @@
         <res-ref-name>jms/QueueConnectionFactory</res-ref-name>
         <jndi-name>jms/opc/QueueConnectionFactory</jndi-name>
       </resource-ref>
+      <resource-ref>
+        <res-ref-name>url/EntityCatalogURL</res-ref-name>
+        <jndi-name>http://localhost:8080/opc/EntityCatalog.jsp</jndi-name>
+      </resource-ref>
       <resource-env-ref>
         <resource-env-ref-name>jms/OrderApprovalQueue</resource-env-ref-name>
         <jndi-name>jms/opc/OrderApprovalQueue</jndi-name>
@@ -24,6 +28,10 @@
         <res-ref-name>jms/QueueConnectionFactory</res-ref-name>
         <jndi-name>jms/opc/QueueConnectionFactory</jndi-name>
       </resource-ref>
+      <resource-ref>
+        <res-ref-name>url/EntityCatalogURL</res-ref-name>
+        <jndi-name>http://localhost:8080/opc/EntityCatalog.jsp</jndi-name>
+      </resource-ref>
       <resource-env-ref>
         <resource-env-ref-name>jms/CompletedOrderMailQueue</resource-env-ref-name>
         <jndi-name>jms/opc/MailCompletedOrderQueue</jndi-name>
@@ -38,6 +46,10 @@
       <resource-ref>
         <res-ref-name>jms/QueueConnectionFactory</res-ref-name>
         <jndi-name>jms/opc/QueueConnectionFactory</jndi-name>
+      </resource-ref>
+      <resource-ref>
+        <res-ref-name>url/EntityCatalogURL</res-ref-name>
+        <jndi-name>http://localhost:8080/opc/EntityCatalog.jsp</jndi-name>
       </resource-ref>
       <resource-env-ref>
         <resource-env-ref-name>jms/OrderApprovalMailQueue</resource-env-ref-name>
@@ -58,6 +70,10 @@
         <res-ref-name>jms/QueueConnectionFactory</res-ref-name>
         <jndi-name>jms/opc/QueueConnectionFactory</jndi-name>
       </resource-ref>
+      <resource-ref>
+        <res-ref-name>url/EntityCatalogURL</res-ref-name>
+        <jndi-name>http://localhost:8080/opc/EntityCatalog.jsp</jndi-name>
+      </resource-ref>
       <resource-env-ref>
         <resource-env-ref-name>jms/MailQueue</resource-env-ref-name>
         <jndi-name>jms/opc/MailQueue</jndi-name>
@@ -72,6 +88,10 @@
       <resource-ref>
         <res-ref-name>jms/QueueConnectionFactory</res-ref-name>
         <jndi-name>jms/opc/QueueConnectionFactory</jndi-name>
+      </resource-ref>
+      <resource-ref>
+        <res-ref-name>url/EntityCatalogURL</res-ref-name>
+        <jndi-name>http://localhost:8080/opc/EntityCatalog.jsp</jndi-name>
       </resource-ref>
       <resource-env-ref>
         <resource-env-ref-name>jms/MailQueue</resource-env-ref-name>

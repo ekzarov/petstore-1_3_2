@@ -21,6 +21,13 @@
         <jndi-name>jms/supplier/QueueConnectionFactory</jndi-name>
       </mdb-connection-factory>
     </ejb>
+    <ejb>
+      <ejb-name>OrderFulfillmentFacadeEJB</ejb-name>
+      <resource-ref>
+        <res-ref-name>url/EntityCatalogURL</res-ref-name>
+        <jndi-name>http://localhost:8080/opc/EntityCatalog.jsp</jndi-name>
+      </resource-ref>
+    </ejb>
     <cmp-resource>
       <jndi-name>jdbc/supplier/SupplierDB</jndi-name>
       <create-tables-at-deploy>true</create-tables-at-deploy>
