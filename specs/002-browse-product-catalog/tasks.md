@@ -61,12 +61,12 @@
 
 ### Tests for User Story 1
 
-- [ ] T022 [P] [US1] Add contract test for `GET /api/catalog/categories` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [x] T022 [P] [US1] Add contract test for `GET /api/catalog/categories` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T023 [US1] Create `dotnet/Petstore/Controllers/CatalogCategoriesController.cs` with `GET /api/catalog/categories`
-- [ ] T024 [US1] Verify User Story 1 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [x] T023 [US1] Create `dotnet/Petstore/Controllers/CatalogCategoriesController.cs` with `GET /api/catalog/categories`
+- [x] T024 [US1] Verify User Story 1 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: User Story 1 is independently functional and testable.
 
@@ -80,12 +80,12 @@
 
 ### Tests for User Story 2
 
-- [ ] T025 [P] [US2] Add contract test for `GET /api/catalog/categories/FISH/products` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [x] T025 [P] [US2] Add contract test for `GET /api/catalog/categories/FISH/products` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] Extend `dotnet/Petstore/Controllers/CatalogCategoriesController.cs` with `GET /api/catalog/categories/{categoryId}/products`
-- [ ] T027 [US2] Verify User Story 2 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [x] T026 [US2] Extend `dotnet/Petstore/Controllers/CatalogCategoriesController.cs` with `GET /api/catalog/categories/{categoryId}/products`
+- [x] T027 [US2] Verify User Story 2 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: User Story 2 is independently functional and does not require item endpoints.
 

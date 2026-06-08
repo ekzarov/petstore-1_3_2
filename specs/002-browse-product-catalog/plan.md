@@ -16,6 +16,8 @@ Implement the first migrated catalog slice as a read-only ASP.NET Core Web API i
 
 **Storage**: EF Core relational database. Local development uses SQL Server with Windows Authentication configured by `ConnectionStrings:PetstoreCatalog` in `appsettings`; the provider/connection string can be changed later without changing the public API contract.
 
+**Test Storage**: Test configuration must use the same connection string key as the application, `ConnectionStrings:PetstoreCatalog`, while pointing the value at an isolated test database such as `PetstoreCatalogTests`.
+
 **Testing**: .NET test project to be added under `dotnet/Petstore.Tests`, using xUnit or the repo-approved .NET test default during task generation. Contract tests should exercise the API through ASP.NET Core test hosting.
 
 **Target Platform**: Local developer machine and container-friendly ASP.NET Core service; legacy Docker/Payara remains the parity reference but is not changed by this feature.

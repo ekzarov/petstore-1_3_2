@@ -10,10 +10,13 @@ public sealed class PetstoreCatalogTestsFixture
 
     public PetstoreCatalogTestsFixture()
     {
+        ConnectionString = GetConnectionString();
         options = new DbContextOptionsBuilder<PetstoreCatalogContext>()
-            .UseSqlServer(GetConnectionString())
+            .UseSqlServer(ConnectionString)
             .Options;
     }
+
+    public string ConnectionString { get; }
 
     public PetstoreCatalogContext CreateContext()
     {
@@ -43,8 +46,8 @@ public sealed class PetstoreCatalogTestsFixture
 
         return document.RootElement
             .GetProperty("ConnectionStrings")
-            .GetProperty("PetstoreCatalogTests")
+            .GetProperty("PetstoreCatalog")
             .GetString()
-            ?? throw new InvalidOperationException("Connection string 'PetstoreCatalogTests' is not configured.");
+            ?? throw new InvalidOperationException("Connection string 'PetstoreCatalog' is not configured.");
     }
 }
