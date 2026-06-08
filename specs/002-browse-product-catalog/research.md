@@ -9,15 +9,25 @@
 - Migrated server-rendered UI: rejected because the user explicitly chose Web API for the first slice.
 - Full frontend + backend catalog flow: rejected because it expands scope before catalog parity is proven.
 
-## Decision: Use hardcoded in-process seed data for the first implementation
+## Decision: Use EF Core with a configured relational database for catalog storage
 
-**Rationale**: The user explicitly chose a hardcoded static class as the initial data source. This keeps the first catalog slice independent from database migration and makes parity tests deterministic.
+**Rationale**: The implementation should exercise a real persistence boundary before controllers are built. EF Core gives the migrated .NET slice a normal data access path while preserving the same public API contract. Connection strings come from `appsettings` so local and future environments can differ without code changes.
 
 **Alternatives considered**:
 
+- Hardcoded static class: rejected because the feature should now validate real data access, seeders, and context wiring before API implementation continues.
 - Read directly from legacy H2: rejected because it couples the new API to the legacy runtime and database setup.
-- Introduce a new .NET database now: rejected because persistence is a later migration concern.
-- Parse `Populate-UTF8.xml` at runtime: rejected for this slice because it adds XML parsing behavior before API contract and parity are stable.
+- Parse `Populate-UTF8.xml` at runtime: rejected for this slice because deterministic application seeders are simpler and easier to test.
+
+## Decision: Use SQL Server as the local EF Core provider
+
+**Rationale**: The developer already has local SQL Server available with Windows Authentication. Using SQL Server now validates the same provider family likely to be used beyond the first catalog slice while still keeping the API contract independent from storage details.
+
+**Alternatives considered**:
+
+- SQLite: rejected because local SQL Server is already available and gives more realistic provider behavior for the migrated .NET application.
+- EF Core InMemory provider: rejected because it does not behave like a relational database and would miss relationship/schema issues.
+- Legacy H2: rejected because it keeps the migrated API tied to Java-era infrastructure.
 
 ## Decision: Preserve legacy ids in API responses
 
@@ -55,3 +65,12 @@
 
 - Informal endpoint list only: rejected because it leaves response shape ambiguous.
 - Generate contract after implementation: rejected because tasks should be contract-driven.
+
+## Decision: Seed catalog data through application seeders
+
+**Rationale**: Seeders keep the first migrated catalog deterministic while using EF Core storage. They can preserve known legacy ids such as `FISH`, `FI-SW-01`, and `EST-1`, and can later be replaced by migrations/import tooling if the migration strategy changes.
+
+**Alternatives considered**:
+
+- Manual database setup: rejected because local startup and tests should be reproducible.
+- Runtime XML import: deferred until a broader data migration slice.

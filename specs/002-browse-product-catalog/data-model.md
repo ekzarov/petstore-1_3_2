@@ -12,6 +12,8 @@ Represents a top-level catalog group.
 
 **Relationships**: One category has zero or more products.
 
+**Persistence**: Stored as an EF Core entity with `id` as the primary key.
+
 **Validation rules**:
 
 - `id` is unique across categories.
@@ -30,6 +32,8 @@ Represents a product family inside a category.
 | description | string | No | English legacy description when available. |
 
 **Relationships**: One product belongs to one category and has zero or more sellable items.
+
+**Persistence**: Stored as an EF Core entity with `id` as the primary key and `categoryId` as a required foreign key to Category.
 
 **Validation rules**:
 
@@ -53,6 +57,8 @@ Represents a sellable catalog variant.
 
 **Relationships**: One item belongs to one product.
 
+**Persistence**: Stored as an EF Core entity with `id` as the primary key and `productId` as a required foreign key to Product. `attributes` may be persisted as owned child rows or a provider-appropriate serialized value; the API response remains an array of strings.
+
 **Validation rules**:
 
 - `id` is unique across items.
@@ -72,3 +78,31 @@ Represents a simple non-success API response.
 **Validation rules**:
 
 - Unknown category, product, or item ids return an `ApiError` with HTTP `404`.
+
+## PetstoreCatalogContext
+
+EF Core context for the migrated catalog slice.
+
+| DbSet | Entity | Notes |
+|-------|--------|-------|
+| Categories | Category | Top-level seeded categories. |
+| Products | Product | Product families linked to categories. |
+| Items | Item | Sellable variants linked to products. |
+
+**Configuration rules**:
+
+- Reads connection string `PetstoreCatalog` from application configuration.
+- Local development uses SQL Server with Windows Authentication unless a later plan selects another provider.
+- Schema must enforce required ids and relationships needed for catalog parity.
+
+## Catalog Seeder
+
+Deterministic seeder that inserts or updates representative legacy catalog data.
+
+**Seed rules**:
+
+- Must preserve stable legacy ids.
+- Must seed at least `FISH`, `DOGS`, `REPTILES`, `CATS`, `BIRDS`.
+- Must seed Fish products including `FI-SW-01` Angelfish and `FI-FW-02` Goldfish.
+- Must seed Angelfish items including `EST-1` Large Angelfish and `EST-2` Small Angelfish.
+- Must be safe to run repeatedly without duplicating rows.

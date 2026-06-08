@@ -4,7 +4,7 @@
 
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/openapi.yaml, quickstart.md
 
-**Tests**: Unit tests are included for catalog seed/store behavior where internal logic exists. Contract/integration tests are included because the feature must remain independently testable and quickstart defines API verification scenarios.
+**Tests**: Unit tests are included for EF Core catalog seeding and repository behavior where internal logic exists. Contract/integration tests are included because the feature must remain independently testable and quickstart defines API verification scenarios.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -27,7 +27,7 @@
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Shared catalog data structures and seed data that all catalog endpoints depend on.
+**Purpose**: Shared EF Core catalog persistence, seeders, and data access that all catalog endpoints depend on.
 
 **CRITICAL**: No user story endpoint work should begin until this phase is complete.
 
@@ -35,13 +35,17 @@
 - [x] T006 [P] Create `dotnet/Petstore/Models/ProductDto.cs` with id, categoryId, name, and optional description fields
 - [x] T007 [P] Create `dotnet/Petstore/Models/ItemDto.cs` with id, productId, name, attributes, optional description, price, and currency fields
 - [x] T008 [P] Create `dotnet/Petstore/Models/ApiErrorDto.cs` with code and message fields
-- [ ] T009 Create `dotnet/Petstore/Catalog/CatalogSeedData.cs` with hardcoded legacy categories, Fish products, Angelfish items, and representative seed entries using stable ids from `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml`
-- [ ] T010 Create `dotnet/Petstore/Catalog/CatalogStore.cs` with read-only lookup methods for categories, products by category, items by product, and item by id
-- [ ] T011 [P] Add unit tests for catalog seed integrity, unique ids, referential relationships, and representative legacy values in `dotnet/Petstore.Tests/CatalogSeedDataTests.cs`
-- [ ] T012 [P] Add unit tests for `CatalogStore` lookup behavior, empty known collections, and unknown id results in `dotnet/Petstore.Tests/CatalogStoreTests.cs`
-- [ ] T013 Register `CatalogStore` in `dotnet/Petstore/Program.cs`
+- [ ] T009 Add EF Core SQL Server packages to `dotnet/Petstore/Petstore.csproj` and relational EF Core test packages to `dotnet/Petstore.Tests/Petstore.Tests.csproj`
+- [ ] T010 Add `ConnectionStrings:PetstoreCatalog` SQL Server connection string to `dotnet/Petstore/appsettings.Development.json`
+- [ ] T011 [P] Create EF Core entities in `dotnet/Petstore/Data/Entities/CategoryEntity.cs`, `dotnet/Petstore/Data/Entities/ProductEntity.cs`, and `dotnet/Petstore/Data/Entities/ItemEntity.cs`
+- [ ] T012 Create `dotnet/Petstore/Data/PetstoreCatalogContext.cs` with DbSets, keys, relationships, and value mapping for item attributes
+- [ ] T013 Create `dotnet/Petstore/Catalog/CatalogSeeder.cs` that idempotently seeds legacy categories, Fish products, Angelfish items, and representative values from `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml`
+- [ ] T014 Create `dotnet/Petstore/Catalog/CatalogRepository.cs` with read-only async lookup methods for categories, products by category, items by product, and item by id
+- [ ] T015 [P] Add unit tests for catalog seeder integrity, unique ids, referential relationships, idempotency, and representative legacy values in `dotnet/Petstore.Tests/CatalogSeederTests.cs`
+- [ ] T016 [P] Add unit tests for `CatalogRepository` lookup behavior, empty known collections, and unknown id results in `dotnet/Petstore.Tests/CatalogRepositoryTests.cs`
+- [ ] T017 Register `PetstoreCatalogContext`, `CatalogRepository`, and startup seeding in `dotnet/Petstore/Program.cs`
 
-**Checkpoint**: Catalog DTOs, hardcoded seed data, and read-only store are available to all stories.
+**Checkpoint**: Catalog DTOs, EF Core schema/context, seeded database data, and read-only repository are available to all stories.
 
 ---
 
@@ -53,12 +57,12 @@
 
 ### Tests for User Story 1
 
-- [ ] T014 [P] [US1] Add contract test for `GET /api/catalog/categories` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [ ] T018 [P] [US1] Add contract test for `GET /api/catalog/categories` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T015 [US1] Create `dotnet/Petstore/Controllers/CatalogCategoriesController.cs` with `GET /api/catalog/categories`
-- [ ] T016 [US1] Verify User Story 1 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [ ] T019 [US1] Create `dotnet/Petstore/Controllers/CatalogCategoriesController.cs` with `GET /api/catalog/categories`
+- [ ] T020 [US1] Verify User Story 1 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: User Story 1 is independently functional and testable.
 
@@ -72,12 +76,12 @@
 
 ### Tests for User Story 2
 
-- [ ] T017 [P] [US2] Add contract test for `GET /api/catalog/categories/FISH/products` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [ ] T021 [P] [US2] Add contract test for `GET /api/catalog/categories/FISH/products` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Extend `dotnet/Petstore/Controllers/CatalogCategoriesController.cs` with `GET /api/catalog/categories/{categoryId}/products`
-- [ ] T019 [US2] Verify User Story 2 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [ ] T022 [US2] Extend `dotnet/Petstore/Controllers/CatalogCategoriesController.cs` with `GET /api/catalog/categories/{categoryId}/products`
+- [ ] T023 [US2] Verify User Story 2 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: User Story 2 is independently functional and does not require item endpoints.
 
@@ -91,14 +95,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T020 [P] [US3] Add contract test for `GET /api/catalog/products/FI-SW-01/items` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
-- [ ] T021 [P] [US3] Add contract test for `GET /api/catalog/items/EST-1` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [ ] T024 [P] [US3] Add contract test for `GET /api/catalog/products/FI-SW-01/items` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [ ] T025 [P] [US3] Add contract test for `GET /api/catalog/items/EST-1` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T022 [P] [US3] Create `dotnet/Petstore/Controllers/CatalogProductsController.cs` with `GET /api/catalog/products/{productId}/items`
-- [ ] T023 [P] [US3] Create `dotnet/Petstore/Controllers/CatalogItemsController.cs` with `GET /api/catalog/items/{itemId}`
-- [ ] T024 [US3] Verify User Story 3 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [ ] T026 [P] [US3] Create `dotnet/Petstore/Controllers/CatalogProductsController.cs` with `GET /api/catalog/products/{productId}/items`
+- [ ] T027 [P] [US3] Create `dotnet/Petstore/Controllers/CatalogItemsController.cs` with `GET /api/catalog/items/{itemId}`
+- [ ] T028 [US3] Verify User Story 3 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: User Story 3 is independently functional and provides the item lookup needed by future cart work.
 
@@ -112,12 +116,12 @@
 
 ### Tests for User Story 4
 
-- [ ] T025 [P] [US4] Add parity test for Fish -> Angelfish -> EST-1/EST-2 legacy ids and values in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [ ] T029 [P] [US4] Add parity test for Fish -> Angelfish -> EST-1/EST-2 legacy ids and values in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T026 [US4] Review `dotnet/Petstore/Catalog/CatalogSeedData.cs` against `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml` and correct any mismatched representative values
-- [ ] T027 [US4] Verify User Story 4 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [ ] T030 [US4] Review `dotnet/Petstore/Catalog/CatalogSeeder.cs` against `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml` and correct any mismatched representative values
+- [ ] T031 [US4] Verify User Story 4 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: Representative catalog parity path is documented by automated tests.
 
@@ -131,14 +135,14 @@
 
 ### Tests for User Story 5
 
-- [ ] T028 [P] [US5] Add not-found contract tests for unknown category, product, and item ids in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [ ] T032 [P] [US5] Add not-found contract tests for unknown category, product, and item ids in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 5
 
-- [ ] T029 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogCategoriesController.cs`
-- [ ] T030 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogProductsController.cs`
-- [ ] T031 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogItemsController.cs`
-- [ ] T032 [US5] Verify User Story 5 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [ ] T033 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogCategoriesController.cs`
+- [ ] T034 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogProductsController.cs`
+- [ ] T035 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogItemsController.cs`
+- [ ] T036 [US5] Verify User Story 5 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: Missing catalog data behavior is independently functional and clear.
 
@@ -148,12 +152,12 @@
 
 **Purpose**: Remove scaffold noise, align generated API behavior with the planning artifacts, and run final validation.
 
-- [ ] T033 Remove or intentionally retain the WeatherForecast scaffold in `dotnet/Petstore/Controllers/WeatherForecastController.cs`, `dotnet/Petstore/WeatherForecast.cs`, and `dotnet/Petstore/Petstore.http`
-- [ ] T034 [P] Update `dotnet/Petstore/Petstore.http` with catalog API sample requests matching `specs/002-browse-product-catalog/quickstart.md`
-- [ ] T035 [P] Review `specs/002-browse-product-catalog/contracts/openapi.yaml` against implemented routes and update only if implementation intentionally changes the approved contract
-- [ ] T036 Run `dotnet build dotnet/Petstore/Petstore.slnx`
-- [ ] T037 Run `dotnet test dotnet/Petstore/Petstore.slnx`
-- [ ] T038 Validate quickstart scenarios from `specs/002-browse-product-catalog/quickstart.md`
+- [ ] T037 Remove or intentionally retain the WeatherForecast scaffold in `dotnet/Petstore/Controllers/WeatherForecastController.cs`, `dotnet/Petstore/WeatherForecast.cs`, and `dotnet/Petstore/Petstore.http`
+- [ ] T038 [P] Update `dotnet/Petstore/Petstore.http` with catalog API sample requests matching `specs/002-browse-product-catalog/quickstart.md`
+- [ ] T039 [P] Review `specs/002-browse-product-catalog/contracts/openapi.yaml` against implemented routes and update only if implementation intentionally changes the approved contract
+- [ ] T040 Run `dotnet build dotnet/Petstore/Petstore.slnx`
+- [ ] T041 Run `dotnet test dotnet/Petstore/Petstore.slnx`
+- [ ] T042 Validate quickstart scenarios from `specs/002-browse-product-catalog/quickstart.md`
 
 ---
 
@@ -173,8 +177,8 @@
 ### User Story Dependencies
 
 - **US1 View Catalog Categories (P1)**: No dependency on other user stories after foundation.
-- **US2 View Products in a Category (P1)**: Uses shared seed/store and the categories controller; no dependency on item endpoints.
-- **US3 View Items for a Product (P1)**: Uses shared seed/store; no dependency on category endpoint implementation.
+- **US2 View Products in a Category (P1)**: Uses shared EF Core repository and the categories controller; no dependency on item endpoints.
+- **US3 View Items for a Product (P1)**: Uses shared EF Core repository; no dependency on category endpoint implementation.
 - **US4 Preserve Legacy Catalog Parity (P2)**: Depends on US1-US3 to verify category-to-product-to-item parity.
 - **US5 Handle Missing Catalog Data (P3)**: Depends on endpoint implementations created for US2 and US3.
 
@@ -182,22 +186,23 @@
 
 - T003 can run after T001 while T002/T004 are being prepared.
 - T005-T008 can run in parallel because each creates a separate DTO file.
-- T011 and T012 can be written after T009/T010 to lock seed/store behavior before controllers.
-- T014 can be written before T015 as a failing contract test.
-- T020 and T021 can run in parallel because they target different endpoint behaviors.
-- T022 and T023 can run in parallel because they create separate controller files.
-- T029-T031 can be worked in parallel after the corresponding controller files exist.
-- T034 and T035 can run in parallel during polish.
+- T011 can run after T009/T010 because entities depend on EF package setup and configured persistence decisions.
+- T015 and T016 can be written after T012-T014 to lock seeder/repository behavior before controllers.
+- T018 can be written before T019 as a failing contract test.
+- T024 and T025 can run in parallel because they target different endpoint behaviors.
+- T026 and T027 can run in parallel because they create separate controller files.
+- T033-T035 can be worked in parallel after the corresponding controller files exist.
+- T038 and T039 can run in parallel during polish.
 
 ---
 
 ## Parallel Example: User Story 3
 
 ```text
-Task: "T020 [P] [US3] Add contract test for GET /api/catalog/products/FI-SW-01/items in dotnet/Petstore.Tests/CatalogApiContractTests.cs"
-Task: "T021 [P] [US3] Add contract test for GET /api/catalog/items/EST-1 in dotnet/Petstore.Tests/CatalogApiContractTests.cs"
-Task: "T022 [P] [US3] Create dotnet/Petstore/Controllers/CatalogProductsController.cs with GET /api/catalog/products/{productId}/items"
-Task: "T023 [P] [US3] Create dotnet/Petstore/Controllers/CatalogItemsController.cs with GET /api/catalog/items/{itemId}"
+Task: "T024 [P] [US3] Add contract test for GET /api/catalog/products/FI-SW-01/items in dotnet/Petstore.Tests/CatalogApiContractTests.cs"
+Task: "T025 [P] [US3] Add contract test for GET /api/catalog/items/EST-1 in dotnet/Petstore.Tests/CatalogApiContractTests.cs"
+Task: "T026 [P] [US3] Create dotnet/Petstore/Controllers/CatalogProductsController.cs with GET /api/catalog/products/{productId}/items"
+Task: "T027 [P] [US3] Create dotnet/Petstore/Controllers/CatalogItemsController.cs with GET /api/catalog/items/{itemId}"
 ```
 
 ---
@@ -213,7 +218,7 @@ Task: "T023 [P] [US3] Create dotnet/Petstore/Controllers/CatalogItemsController.
 
 ### Incremental Delivery
 
-1. Setup + foundation create the reusable catalog model/store.
+1. Setup + foundation create the reusable EF Core catalog context, seeder, and repository.
 2. US1 exposes categories as the first demonstrable migrated API.
 3. US2 adds products by category.
 4. US3 adds product items and item lookup.
@@ -226,7 +231,7 @@ After Phase 2, one developer can work on categories/products while another works
 
 ## Notes
 
-- Keep this slice read-only and in-memory only.
-- Do not introduce database, legacy H2 connectivity, JMS, cart, checkout, OPC, Supplier, invoice, search, localization, or admin catalog editing work in this feature.
+- Keep this slice read-only at the API level; database writes are limited to schema creation/migration and deterministic seeders.
+- Do not introduce legacy H2 connectivity, JMS, cart, checkout, OPC, Supplier, invoice, search, localization, or admin catalog editing work in this feature.
 - Preserve legacy ids exactly because future cart migration will depend on item ids.
 - Commit implementation in small logical groups at story checkpoints.

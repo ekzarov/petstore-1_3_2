@@ -6,7 +6,20 @@ This guide validates the first migrated catalog API slice after implementation.
 
 - .NET SDK capable of building `dotnet/Petstore/Petstore.csproj`.
 - Repository checked out on the feature branch.
+- `ConnectionStrings:PetstoreCatalog` configured in `dotnet/Petstore/appsettings.Development.json`.
 - Optional parity reference: legacy Payara stack running from the existing Docker setup.
+
+Local development uses SQL Server with Windows Authentication by default. Example development connection string:
+
+```json
+{
+  "ConnectionStrings": {
+    "PetstoreCatalog": "Server=.;Database=PetstoreCatalog;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True"
+  }
+}
+```
+
+The database is created and seeded by the application during startup or by the implementation's documented setup command.
 
 ## Build
 
@@ -21,6 +34,8 @@ dotnet run --project dotnet/Petstore/Petstore.csproj
 ```
 
 Use the local URL printed by ASP.NET Core. In development, OpenAPI should be available at `/openapi/v1.json` if the existing scaffold behavior is retained.
+
+Before serving catalog requests, the implementation should ensure the EF Core catalog database exists and contains seeded category, product, and item rows.
 
 ## Contract Checks
 
@@ -85,3 +100,9 @@ dotnet test dotnet/Petstore/Petstore.slnx
 ```
 
 Tests should cover the OpenAPI contract paths, representative legacy parity ids, and not-found behavior.
+
+Unit tests should also cover:
+
+- catalog seeder idempotency
+- stable legacy ids and required relationships
+- repository lookup behavior for known and unknown ids
