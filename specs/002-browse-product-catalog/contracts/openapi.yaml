@@ -1,0 +1,204 @@
+openapi: 3.1.0
+info:
+  title: PetStore Catalog API
+  version: 0.1.0
+  description: Read-only migrated catalog API for the first PetStore migration slice.
+paths:
+  /api/catalog/categories:
+    get:
+      summary: List catalog categories
+      operationId: listCatalogCategories
+      responses:
+        "200":
+          description: Categories returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+  /api/catalog/categories/{categoryId}/products:
+    get:
+      summary: List products in a category
+      operationId: listCatalogProductsByCategory
+      parameters:
+        - $ref: "#/components/parameters/CategoryId"
+      responses:
+        "200":
+          description: Products returned. May be an empty array for a known category.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/catalog/products/{productId}/items:
+    get:
+      summary: List sellable items for a product
+      operationId: listCatalogItemsByProduct
+      parameters:
+        - $ref: "#/components/parameters/ProductId"
+      responses:
+        "200":
+          description: Items returned. May be an empty array for a known product.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/catalog/items/{itemId}:
+    get:
+      summary: Get a sellable item by id
+      operationId: getCatalogItemById
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      responses:
+        "200":
+          description: Item returned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          $ref: "#/components/responses/NotFound"
+components:
+  parameters:
+    CategoryId:
+      name: categoryId
+      in: path
+      required: true
+      schema:
+        type: string
+      examples:
+        fish:
+          value: FISH
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      schema:
+        type: string
+      examples:
+        angelfish:
+          value: FI-SW-01
+    ItemId:
+      name: itemId
+      in: path
+      required: true
+      schema:
+        type: string
+      examples:
+        largeAngelfish:
+          value: EST-1
+  responses:
+    NotFound:
+      description: Requested catalog resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiError"
+  schemas:
+    Category:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          examples:
+            - FISH
+        name:
+          type: string
+          examples:
+            - Fish
+        description:
+          type:
+            - string
+            - "null"
+    Product:
+      type: object
+      required:
+        - id
+        - categoryId
+        - name
+      properties:
+        id:
+          type: string
+          examples:
+            - FI-SW-01
+        categoryId:
+          type: string
+          examples:
+            - FISH
+        name:
+          type: string
+          examples:
+            - Angelfish
+        description:
+          type:
+            - string
+            - "null"
+          examples:
+            - Salt Water fish from Australia
+    Item:
+      type: object
+      required:
+        - id
+        - productId
+        - name
+        - price
+        - currency
+      properties:
+        id:
+          type: string
+          examples:
+            - EST-1
+        productId:
+          type: string
+          examples:
+            - FI-SW-01
+        name:
+          type: string
+          examples:
+            - Large Angelfish
+        attributes:
+          type: array
+          items:
+            type: string
+          examples:
+            - [Large, Cuddly]
+        description:
+          type:
+            - string
+            - "null"
+          examples:
+            - Fresh Water fish from Japan
+        price:
+          type: number
+          format: decimal
+          examples:
+            - 16.50
+        currency:
+          type: string
+          examples:
+            - USD
+    ApiError:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          examples:
+            - catalog.category_not_found
+        message:
+          type: string
+          examples:
+            - Category was not found.
