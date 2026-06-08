@@ -94,6 +94,8 @@ EF Core context for the migrated catalog slice.
 - Reads connection string `PetstoreCatalog` from application configuration.
 - Local development uses SQL Server with Windows Authentication unless a later plan selects another provider.
 - Schema must enforce required ids and relationships needed for catalog parity.
+- Entity mapping rules live in separate EF Core `IEntityTypeConfiguration<T>` classes.
+- Table names, max lengths, precision, and similar mapping literals are centralized in catalog model constants.
 
 ## Catalog Seeder
 
