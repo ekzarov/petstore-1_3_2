@@ -97,6 +97,12 @@ dotnet/Petstore.Tests/
 
 **EF Core Mapping Decision**: Keep `PetstoreCatalogContext` focused on DbSets and configuration registration. Entity mapping must live in separate `IEntityTypeConfiguration<T>` classes under `dotnet/Petstore/Data/Configurations/`. Table names, string length limits, precision values, and other repeated model constants must be centralized in `dotnet/Petstore/Data/CatalogModelConstants.cs`; mappings must reference constants rather than hardcoded literals.
 
+**EF Core Seed Data Decision**: Deterministic reference catalog data must be configured through `OnModelCreating` with separate public static seeder classes, for example `CatalogSeeder.Seed(modelBuilder)`. Do not seed reference data from hosted services or application startup side effects; seed data should be captured by migrations through `HasData`.
+
+**.NET Naming Decision**: New .NET classes, interfaces, fixtures, and test types must use PascalCase names without underscores, for example `PetstoreCatalogTestsFixture` rather than `PetstoreCatalog_TestsFixture`. Database names and connection string values should follow the same convention unless an external provider requires otherwise.
+
+**.NET File Organization Decision**: Every public class, interface, record, enum, and fixture must live in its own file named after the public type.
+
 ## Phase 0: Research
 
 See [research.md](research.md).

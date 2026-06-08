@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Petstore.Catalog;
+using Petstore.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddDbContext<PetstoreCatalogContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("PetstoreCatalog")
+        ?? throw new InvalidOperationException("Connection string 'PetstoreCatalog' is not configured.")));
+builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
 
 var app = builder.Build();
 
