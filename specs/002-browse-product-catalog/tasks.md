@@ -35,8 +35,8 @@
 - [x] T006 [P] Create `dotnet/Petstore/Models/ProductDto.cs` with id, categoryId, name, and optional description fields
 - [x] T007 [P] Create `dotnet/Petstore/Models/ItemDto.cs` with id, productId, name, attributes, optional description, price, and currency fields
 - [x] T008 [P] Create `dotnet/Petstore/Models/ApiErrorDto.cs` with code and message fields
-- [ ] T009 Add EF Core SQL Server packages to `dotnet/Petstore/Petstore.csproj` and relational EF Core test packages to `dotnet/Petstore.Tests/Petstore.Tests.csproj`
-- [ ] T010 Add `ConnectionStrings:PetstoreCatalog` SQL Server connection string to `dotnet/Petstore/appsettings.Development.json`
+- [x] T009 Add EF Core SQL Server packages to `dotnet/Petstore/Petstore.csproj` and relational EF Core test packages to `dotnet/Petstore.Tests/Petstore.Tests.csproj`
+- [x] T010 Add `ConnectionStrings:PetstoreCatalog` SQL Server connection string to `dotnet/Petstore/appsettings.Development.json`
 - [ ] T011 [P] Create EF Core entities in `dotnet/Petstore/Data/Entities/CategoryEntity.cs`, `dotnet/Petstore/Data/Entities/ProductEntity.cs`, and `dotnet/Petstore/Data/Entities/ItemEntity.cs`
 - [ ] T012 Create `dotnet/Petstore/Data/PetstoreCatalogContext.cs` with DbSets, keys, relationships, and value mapping for item attributes
 - [ ] T013 Create `dotnet/Petstore/Catalog/CatalogSeeder.cs` that idempotently seeds legacy categories, Fish products, Angelfish items, and representative values from `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml`
