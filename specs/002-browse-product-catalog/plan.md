@@ -68,6 +68,11 @@ dotnet/Petstore/
 |   `-- CatalogRepository.cs
 |-- Data/
 |   |-- PetstoreCatalogContext.cs
+|   |-- CatalogModelConstants.cs
+|   |-- Configurations/
+|   |   |-- CategoryEntityConfiguration.cs
+|   |   |-- ProductEntityConfiguration.cs
+|   |   `-- ItemEntityConfiguration.cs
 |   `-- Entities/
 |       |-- CategoryEntity.cs
 |       |-- ProductEntity.cs
@@ -89,6 +94,8 @@ dotnet/Petstore.Tests/
 ```
 
 **Structure Decision**: Keep the first slice in the existing ASP.NET Core project to minimize migration surface area. Add EF Core data access inside the same project for now, backed by a local SQL Server database configured through `appsettings`. Add a narrow test project next to it so repository behavior and API contracts can be verified without touching the legacy Java runtime.
+
+**EF Core Mapping Decision**: Keep `PetstoreCatalogContext` focused on DbSets and configuration registration. Entity mapping must live in separate `IEntityTypeConfiguration<T>` classes under `dotnet/Petstore/Data/Configurations/`. Table names, string length limits, precision values, and other repeated model constants must be centralized in `dotnet/Petstore/Data/CatalogModelConstants.cs`; mappings must reference constants rather than hardcoded literals.
 
 ## Phase 0: Research
 
