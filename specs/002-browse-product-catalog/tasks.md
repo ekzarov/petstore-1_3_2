@@ -45,9 +45,9 @@
 - [x] T016 Register `PetstoreCatalogContext`, `ICatalogRepository`, and `CatalogRepository` in `dotnet/Petstore/Program.cs`
 - [x] T017 Add initial EF Core catalog migration files for the SQL Server schema under `dotnet/Petstore/Data/Migrations/`
 - [x] T018 Verify local SQL Server database creation and migration-managed seed data by running `dotnet ef database update --project dotnet/Petstore/Petstore.csproj`
-- [ ] T019 Add SQL Server test database configuration and reset helper for `PetstoreCatalogTests` in `dotnet/Petstore.Tests/appsettings.json` and `dotnet/Petstore.Tests/PetstoreCatalogTestsFixture.cs`
-- [ ] T020 [P] Add SQL Server integration tests for catalog seeder integrity, unique ids, FK relationships, idempotency, and representative legacy values in `dotnet/Petstore.Tests/CatalogSeederTests.cs`
-- [ ] T021 [P] Add SQL Server integration tests for `CatalogRepository` lookup behavior, empty known collections, and unknown id results in `dotnet/Petstore.Tests/CatalogRepositoryTests.cs`
+- [x] T019 Add SQL Server test database configuration and reset helper for `PetstoreCatalogTests` in `dotnet/Petstore.Tests/appsettings.json` and `dotnet/Petstore.Tests/PetstoreCatalogTestsFixture.cs`
+- [x] T020 [P] Add SQL Server integration tests marked with `Trait("Category", "DatabaseIntegration")` for catalog seeder integrity, unique ids, FK relationships, idempotency, and representative legacy values in `dotnet/Petstore.Tests/CatalogSeederTests.cs`
+- [x] T021 [P] Add SQL Server integration tests marked with `Trait("Category", "DatabaseIntegration")` for `CatalogRepository` lookup behavior, empty known collections, and unknown id results in `dotnet/Petstore.Tests/CatalogRepositoryTests.cs`
 
 **Checkpoint**: Catalog DTOs, EF Core schema/context, seeded database data, and read-only repository are available to all stories.
 

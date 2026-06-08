@@ -101,7 +101,11 @@ dotnet/Petstore.Tests/
 
 **.NET Naming Decision**: New .NET classes, interfaces, fixtures, and test types must use PascalCase names without underscores, for example `PetstoreCatalogTestsFixture` rather than `PetstoreCatalog_TestsFixture`. Database names and connection string values should follow the same convention unless an external provider requires otherwise.
 
+**.NET Test Method Naming Decision**: xUnit test method names may use underscores for readability, but each word segment must be PascalCase, for example `Database_Enforces_Product_Category_Foreign_Key` rather than `Database_enforces_product_category_foreign_key`.
+
 **.NET File Organization Decision**: Every public class, interface, record, enum, and fixture must live in its own file named after the public type.
+
+**.NET Test Categorization Decision**: xUnit tests that require a real database or other external integration dependency must be marked with `Trait("Category", "DatabaseIntegration")` so they can be included or excluded with test filters. Run only database integration tests with `dotnet test --filter Category=DatabaseIntegration`; exclude them with `dotnet test --filter Category!=DatabaseIntegration`. Pure unit tests must not use this category.
 
 ## Phase 0: Research
 
