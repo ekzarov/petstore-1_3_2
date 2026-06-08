@@ -20,8 +20,8 @@
 
 - [x] T001 Add `dotnet/Petstore.Tests/Petstore.Tests.csproj` test project with xUnit, `Microsoft.AspNetCore.Mvc.Testing`, and project reference to `dotnet/Petstore/Petstore.csproj`
 - [x] T002 Add `dotnet/Petstore.Tests` to `dotnet/Petstore/Petstore.slnx`
-- [ ] T003 [P] Add `dotnet/Petstore.Tests/Usings.cs` for shared test usings
-- [ ] T004 Update `dotnet/Petstore/Petstore.csproj` or `dotnet/Petstore/Program.cs` as needed so ASP.NET Core test hosting can reference the application entry point
+- [x] T003 [P] Add `dotnet/Petstore.Tests/Usings.cs` for shared test usings
+- [x] T004 Update `dotnet/Petstore/Petstore.csproj` or `dotnet/Petstore/Program.cs` as needed so ASP.NET Core test hosting can reference the application entry point
 
 ---
 
