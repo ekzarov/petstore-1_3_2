@@ -32,4 +32,4 @@
 ## Notes
 
 - This specification intentionally excludes cart, checkout, search, localization, and admin catalog management.
-- Planning should decide how the migrated catalog reads or seeds data while preserving the legacy parity examples.
+- Planning now selects EF Core, a configured relational database, and deterministic seeders while preserving the legacy parity examples.
