@@ -13,10 +13,10 @@
 ### Session 2026-06-08
 
 - Q: What interface should the first migrated catalog slice expose? -> A: Simple Web API.
-- Q: What data source should the first migrated catalog slice use? -> A: Superseded by the EF Core catalog database clarification below.
+- Q: What data source should the first migrated catalog slice use? -> A: Use a migrated catalog data source configured by the implementation plan.
 - Q: What minimum API scope should the first catalog browsing slice provide? -> A: Categories, products by category, items by product, and item by id.
-- Q: Should the first implementation continue using hardcoded static data? -> A: No, use EF Core with a real relational database, seeded catalog data, and a connection string from appsettings.
-- Q: Which local EF Core database provider should the first implementation use? -> A: SQL Server using local Windows Authentication.
+- Q: Should the first implementation continue using hardcoded static data? -> A: No, it must use deterministic migrated catalog data that can be verified independently.
+- Q: Which local data provider should the first implementation use? -> A: Provider selection belongs to the implementation plan, not this feature specification.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -125,16 +125,16 @@ As a store visitor, I want clear feedback when a category, product, or item cann
 - **FR-016**: The feature MUST NOT require user sign-in for ordinary catalog browsing.
 - **FR-017**: The feature MUST remain independently testable without implementing cart, checkout, payment, OPC, Supplier, or invoice processing.
 - **FR-018**: The feature MUST document any intentional presentation differences from the legacy Java UI before implementation.
-- **FR-019**: The first implementation MUST read catalog data through EF Core using a connection string from application configuration.
-- **FR-020**: The first implementation MUST seed representative catalog data into the configured database from deterministic application seeders.
-- **FR-021**: The first implementation MUST NOT connect to the legacy H2 datasource, JMS, or an external catalog service.
+- **FR-019**: The first migrated catalog slice MUST read catalog data from a configured migrated data source rather than hardcoded in-memory lists.
+- **FR-020**: The first migrated catalog slice MUST load representative catalog data deterministically so the same baseline can be verified repeatedly.
+- **FR-021**: The first migrated catalog slice MUST NOT depend on legacy order-processing, supplier, messaging, or external catalog systems.
 
 ### Key Entities *(include if feature involves data)*
 
 - **Category**: A top-level catalog grouping such as Fish, Dogs, Reptiles, Cats, or Birds. It has a stable identifier and display name.
 - **Product**: A product family within a category, such as Angelfish or Goldfish. It has a stable identifier, category relationship, display name, and description.
 - **Item**: A sellable variant of a product, such as Large Angelfish or Small Angelfish. It has a stable item identifier, product relationship, display name or attributes, and price.
-- **Catalog Seed Data**: The reference dataset used to compare migrated catalog behavior with the verified legacy PetStore baseline. In the first migrated slice, this data is seeded into the configured EF Core database.
+- **Catalog Baseline Data**: The reference dataset used to compare migrated catalog behavior with the verified legacy PetStore baseline.
 
 ## Success Criteria *(mandatory)*
 
@@ -142,7 +142,7 @@ As a store visitor, I want clear feedback when a category, product, or item cann
 
 - **SC-001**: A user can reach the Fish category and see Angelfish and Goldfish without signing in.
 - **SC-002**: A user can open Angelfish and see at least Large Angelfish and Small Angelfish with prices.
-- **SC-003**: The Web API can return categories, products for a category, items for a product, and a single item by id using EF Core and the configured catalog database.
+- **SC-003**: The API can return categories, products for a category, items for a product, and a single item by id from the configured catalog data source.
 - **SC-004**: The feature can be verified independently from cart and checkout behavior.
 - **SC-005**: At least one category-to-product-to-item parity path is documented and testable against the legacy baseline.
 - **SC-006**: Missing category, product, and item requests produce clear non-success outcomes without breaking normal catalog navigation.
@@ -153,7 +153,6 @@ As a store visitor, I want clear feedback when a category, product, or item cann
 - This feature represents the first concrete business migration slice after the high-level migration strategy.
 - The legacy Docker/Payara catalog remains the parity reference until an equivalent migrated baseline is approved.
 - Catalog browsing is public and does not require authentication.
-- The first migrated catalog implementation is a Web API backed by EF Core with a local relational database configured through `appsettings`.
-- The local development database provider is SQL Server using Windows Authentication, with connection string name `PetstoreCatalog`.
+- The first migrated catalog implementation exposes a read-only API backed by a configured migrated catalog data source.
 - Add-to-cart, shopping cart updates, checkout, order processing, supplier fulfillment, admin inventory editing, search, localization, and personalized recommendations are out of scope for this feature.
 - The migrated implementation may use a different visual design from the legacy Java UI, but differences must not remove required catalog information or stable identifiers.
