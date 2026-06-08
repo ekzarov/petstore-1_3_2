@@ -19,7 +19,11 @@ Local development uses SQL Server with Windows Authentication by default. Exampl
 }
 ```
 
-The database is created and seeded by the application during startup or by the implementation's documented setup command.
+The database is created and seeded through EF Core migrations. Apply migrations before serving catalog requests:
+
+```powershell
+dotnet ef database update --project dotnet/Petstore/Petstore.csproj --startup-project dotnet/Petstore/Petstore.csproj
+```
 
 ## Build
 
@@ -35,7 +39,7 @@ dotnet run --project dotnet/Petstore/Petstore.csproj
 
 Use the local URL printed by ASP.NET Core. In development, OpenAPI should be available at `/openapi/v1.json` if the existing scaffold behavior is retained.
 
-Before serving catalog requests, the implementation should ensure the EF Core catalog database exists and contains seeded category, product, and item rows.
+Before serving catalog requests, ensure the EF Core catalog database exists and contains migration-managed category, product, and item seed rows.
 
 ## Contract Checks
 
