@@ -1,6 +1,26 @@
 @Petstore_HostAddress = http://localhost:5103
 
-GET {{Petstore_HostAddress}}/weatherforecast/
+GET {{Petstore_HostAddress}}/api/catalog/categories
+Accept: application/json
+
+###
+
+GET {{Petstore_HostAddress}}/api/catalog/categories/FISH/products
+Accept: application/json
+
+###
+
+GET {{Petstore_HostAddress}}/api/catalog/products/FI-SW-01/items
+Accept: application/json
+
+###
+
+GET {{Petstore_HostAddress}}/api/catalog/items/EST-1
+Accept: application/json
+
+###
+
+GET {{Petstore_HostAddress}}/api/catalog/categories/UNKNOWN/products
 Accept: application/json
 
 ###

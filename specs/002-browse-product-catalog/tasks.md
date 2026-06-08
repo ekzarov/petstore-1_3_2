@@ -139,14 +139,14 @@
 
 ### Tests for User Story 5
 
-- [ ] T036 [P] [US5] Add not-found contract tests for unknown category, product, and item ids in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [x] T036 [P] [US5] Add not-found contract tests for unknown category, product, and item ids in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 5
 
-- [ ] T037 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogCategoriesController.cs`
-- [ ] T038 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogProductsController.cs`
-- [ ] T039 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogItemsController.cs`
-- [ ] T040 [US5] Verify User Story 5 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [x] T037 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogCategoriesController.cs`
+- [x] T038 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogProductsController.cs`
+- [x] T039 [US5] Add consistent `ApiErrorDto` not-found responses to `dotnet/Petstore/Controllers/CatalogItemsController.cs`
+- [x] T040 [US5] Verify User Story 5 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: Missing catalog data behavior is independently functional and clear.
 
@@ -156,12 +156,12 @@
 
 **Purpose**: Remove scaffold noise, align generated API behavior with the planning artifacts, and run final validation.
 
-- [ ] T041 Remove or intentionally retain the WeatherForecast scaffold in `dotnet/Petstore/Controllers/WeatherForecastController.cs`, `dotnet/Petstore/WeatherForecast.cs`, and `dotnet/Petstore/Petstore.http`
-- [ ] T042 [P] Update `dotnet/Petstore/Petstore.http` with catalog API sample requests matching `specs/002-browse-product-catalog/quickstart.md`
-- [ ] T043 [P] Review `specs/002-browse-product-catalog/contracts/openapi.yaml` against implemented routes and update only if implementation intentionally changes the approved contract
-- [ ] T044 Run `dotnet build dotnet/Petstore/Petstore.slnx`
-- [ ] T045 Run `dotnet test dotnet/Petstore/Petstore.slnx`
-- [ ] T046 Validate quickstart scenarios from `specs/002-browse-product-catalog/quickstart.md`
+- [x] T041 Remove or intentionally retain the WeatherForecast scaffold in `dotnet/Petstore/Controllers/WeatherForecastController.cs`, `dotnet/Petstore/WeatherForecast.cs`, and `dotnet/Petstore/Petstore.http`
+- [x] T042 [P] Update `dotnet/Petstore/Petstore.http` with catalog API sample requests matching `specs/002-browse-product-catalog/quickstart.md`
+- [x] T043 [P] Review `specs/002-browse-product-catalog/contracts/openapi.yaml` against implemented routes and update only if implementation intentionally changes the approved contract
+- [x] T044 Run `dotnet build dotnet/Petstore/Petstore.slnx`
+- [x] T045 Run `dotnet test dotnet/Petstore/Petstore.slnx`
+- [x] T046 Validate quickstart scenarios from `specs/002-browse-product-catalog/quickstart.md`
 
 ---
 

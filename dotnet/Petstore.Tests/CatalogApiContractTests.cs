@@ -121,6 +121,33 @@ public sealed class CatalogApiContractTests(PetstoreCatalogTestsFixture fixture)
         AssertLegacyItem(legacy.Items["EST-2"], Assert.Single(items, item => item.Id == "EST-2"));
     }
 
+    [Theory]
+    [InlineData(
+        "/api/catalog/categories/UNKNOWN/products",
+        "catalog.category_not_found",
+        "Category was not found.")]
+    [InlineData(
+        "/api/catalog/products/UNKNOWN/items",
+        "catalog.product_not_found",
+        "Product was not found.")]
+    [InlineData(
+        "/api/catalog/items/UNKNOWN",
+        "catalog.item_not_found",
+        "Item was not found.")]
+    public async Task Unknown_Catalog_Ids_Return_NotFound_ApiError(string path, string code, string message)
+    {
+        using var factory = new CatalogApiFactory(Fixture.ConnectionString);
+        using var client = factory.CreateClient();
+
+        var response = await client.GetAsync(path);
+        var error = await response.Content.ReadFromJsonAsync<ApiErrorDto>();
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.NotNull(error);
+        Assert.Equal(code, error.Code);
+        Assert.Equal(message, error.Message);
+    }
+
     private static void AssertLegacyItem(LegacyCatalogItem expected, ItemDto actual)
     {
         Assert.Equal(expected.Id, actual.Id);
