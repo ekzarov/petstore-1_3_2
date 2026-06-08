@@ -99,14 +99,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T028 [P] [US3] Add contract test for `GET /api/catalog/products/FI-SW-01/items` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
-- [ ] T029 [P] [US3] Add contract test for `GET /api/catalog/items/EST-1` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [x] T028 [P] [US3] Add contract test for `GET /api/catalog/products/FI-SW-01/items` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [x] T029 [P] [US3] Add contract test for `GET /api/catalog/items/EST-1` in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T030 [P] [US3] Create `dotnet/Petstore/Controllers/CatalogProductsController.cs` with `GET /api/catalog/products/{productId}/items`
-- [ ] T031 [P] [US3] Create `dotnet/Petstore/Controllers/CatalogItemsController.cs` with `GET /api/catalog/items/{itemId}`
-- [ ] T032 [US3] Verify User Story 3 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [x] T030 [P] [US3] Create `dotnet/Petstore/Controllers/CatalogProductsController.cs` with `GET /api/catalog/products/{productId}/items`
+- [x] T031 [P] [US3] Create `dotnet/Petstore/Controllers/CatalogItemsController.cs` with `GET /api/catalog/items/{itemId}`
+- [x] T032 [US3] Verify User Story 3 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: User Story 3 is independently functional and provides the item lookup needed by future cart work.
 
