@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Petstore\Petstore.csproj" />
   </ItemGroup>
 
