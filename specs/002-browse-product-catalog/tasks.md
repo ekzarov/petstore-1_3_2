@@ -120,12 +120,12 @@
 
 ### Tests for User Story 4
 
-- [ ] T033 [P] [US4] Add parity test for Fish -> Angelfish -> EST-1/EST-2 legacy ids and values in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
+- [x] T033 [P] [US4] Add parity test for Fish -> Angelfish -> EST-1/EST-2 legacy ids and values in `dotnet/Petstore.Tests/CatalogApiContractTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T034 [US4] Review `dotnet/Petstore/Catalog/CatalogSeeder.cs` against `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml` and correct any mismatched representative values
-- [ ] T035 [US4] Verify User Story 4 by running `dotnet test dotnet/Petstore/Petstore.slnx`
+- [x] T034 [US4] Review `dotnet/Petstore/Catalog/CatalogSeeder.cs` against `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml` and correct any mismatched representative values
+- [x] T035 [US4] Verify User Story 4 by running `dotnet test dotnet/Petstore/Petstore.slnx`
 
 **Checkpoint**: Representative catalog parity path is documented by automated tests.
 
