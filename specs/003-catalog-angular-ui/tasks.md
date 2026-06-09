@@ -18,11 +18,11 @@
 
 **Purpose**: Create the Angular application shell and local development bridge to the existing backend API.
 
-- [ ] T001 Create a clean Angular application project under `frontend/petstore-ui/`
-- [ ] T002 Start the clean Angular application and manually verify the default Angular welcome page renders from `frontend/petstore-ui/`
-- [ ] T003 Configure Angular dev scripts to run with `frontend/petstore-ui/proxy.conf.json` in `frontend/petstore-ui/package.json`
-- [ ] T004 Create `/api/*` proxy forwarding to `http://localhost:5103` in `frontend/petstore-ui/proxy.conf.json`
-- [ ] T005 [P] Add frontend ignore rules for Angular build output and dependencies in `frontend/petstore-ui/.gitignore`
+- [X] T001 Create a clean Angular application project under `frontend/petstore-ui/`
+- [X] T002 Start the clean Angular application and manually verify the default Angular welcome page renders from `frontend/petstore-ui/`
+- [X] T003 Configure Angular dev scripts to run with `frontend/petstore-ui/proxy.conf.json` in `frontend/petstore-ui/package.json`
+- [X] T004 Create `/api/*` proxy forwarding to `http://localhost:5103` in `frontend/petstore-ui/proxy.conf.json`
+- [X] T005 [P] Add frontend ignore rules for Angular build output and dependencies in `frontend/petstore-ui/.gitignore`
 
 ---
 
