@@ -32,7 +32,7 @@
 
 **CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T006 Configure standalone Angular app providers and HttpClient in `frontend/petstore-ui/src/app/app.config.ts`
+- [X] T006 Configure standalone Angular app providers and HttpClient in `frontend/petstore-ui/src/app/app.config.ts`
 - [ ] T007 Define catalog route skeletons in `frontend/petstore-ui/src/app/app.routes.ts`
 - [ ] T008 [P] Define catalog API DTOs and view-state types in `frontend/petstore-ui/src/app/catalog/catalog.models.ts`
 - [ ] T009 Implement relative `/api/catalog/...` catalog API service in `frontend/petstore-ui/src/app/catalog/catalog-api.service.ts`
