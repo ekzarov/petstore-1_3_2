@@ -18,7 +18,7 @@ Implement the first migrated catalog slice as a read-only ASP.NET Core Web API i
 
 **Test Storage**: Test configuration must use the same connection string key as the application, `ConnectionStrings:PetstoreCatalog`, while pointing the value at an isolated test database such as `PetstoreCatalogTests`.
 
-**Testing**: .NET test project to be added under `dotnet/Petstore.Tests`, using xUnit or the repo-approved .NET test default during task generation. Contract tests should exercise the API through ASP.NET Core test hosting.
+**Testing**: .NET test project to be added under `dotnet/Petstore.Tests`, using xUnit or the repo-approved .NET test default during task generation. Contract tests should exercise the API through ASP.NET Core test hosting. SQL Server-backed integration tests must cover EF Core schema, seed integrity, FK behavior, repository lookups, and API contract behavior. Pure unit tests should be added for backend logic when behavior exists outside EF Core/API integration boundaries.
 
 **Target Platform**: Local developer machine and container-friendly ASP.NET Core service; legacy Docker/Payara remains the parity reference but is not changed by this feature.
 
@@ -39,6 +39,7 @@ Implement the first migrated catalog slice as a read-only ASP.NET Core Web API i
 - Branch-First, Master-Stable Workflow: Pass. Work is isolated on `spec-browse-product-catalog`.
 - Evidence Before Replacement: Pass. Legacy seed data source is identified as `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml`.
 - Incremental Migration Over Big Bang: Pass. Scope is one read-only catalog API slice, independently testable.
+- Automated Backend Verification: Pass. The plan includes SQL Server integration tests for EF Core/data behavior and ASP.NET Core contract tests for API behavior; no separate pure backend logic requiring unit tests is planned outside those boundaries.
 
 ## Project Structure
 
@@ -109,6 +110,8 @@ dotnet/Petstore.Tests/
 
 **.NET Test Categorization Decision**: xUnit tests that require a real database or other external integration dependency must be marked with `Trait("Category", "DatabaseIntegration")` so they can be included or excluded with test filters. Run only database integration tests with `dotnet test --filter Category=DatabaseIntegration`; exclude them with `dotnet test --filter Category!=DatabaseIntegration`. Pure unit tests must not use this category.
 
+**Backend Test Coverage Decision**: Backend runtime behavior must be covered at the lowest useful automated level. For this catalog slice, EF Core schema/seeding/repository behavior is covered by SQL Server integration tests, public API behavior is covered by ASP.NET Core contract tests, and pure unit tests are only required when logic exists outside those integration boundaries.
+
 ## Phase 0: Research
 
 See [research.md](research.md).
@@ -126,6 +129,7 @@ See [research.md](research.md).
 - Branch-First, Master-Stable Workflow: Pass. No direct `master` changes.
 - Evidence Before Replacement: Pass. The planned implementation uses documented parity anchors from the legacy catalog data and seeds them into the new EF Core catalog store.
 - Incremental Migration Over Big Bang: Pass. No cart/checkout/order processing is included.
+- Automated Backend Verification: Pass. Generated tasks include categorized SQL Server integration tests plus API contract tests for the migrated catalog slice.
 
 ## Complexity Tracking
 

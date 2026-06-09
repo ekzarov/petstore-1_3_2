@@ -9,7 +9,7 @@ description: "Task list template for feature implementation"
 
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
+**Tests**: The examples below include test tasks. Tests are OPTIONAL unless the feature specification, implementation plan, or project constitution requires them. Backend runtime changes require automated test tasks unless a justified deferral is documented.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -179,7 +179,7 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Within Each User Story
 
-- Tests (if included) MUST be written and FAIL before implementation
+- Tests (if included or constitution-required) MUST be written and FAIL before implementation
 - Models before services
 - Services before endpoints
 - Core implementation before integration
