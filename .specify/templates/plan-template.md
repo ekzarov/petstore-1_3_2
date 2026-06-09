@@ -24,7 +24,7 @@
 
 **Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Testing**: [e.g., pytest, XCTest, cargo test. For backend runtime changes, include unit tests for pure logic where present and integration/contract tests for database/API/configuration boundaries, or document a justified deferral.]
 
 **Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
 
@@ -41,6 +41,10 @@
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
 [Gates determined based on constitution file]
+
+For backend runtime features, this check must explicitly state how automated unit,
+integration, or contract tests satisfy the constitution's Automated Backend
+Verification principle, or record the approved deferral and follow-up task.
 
 ## Project Structure
 

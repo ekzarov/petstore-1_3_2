@@ -103,9 +103,9 @@ After tasks are generated and implemented, run:
 dotnet test dotnet/Petstore/Petstore.slnx
 ```
 
-Tests should cover the OpenAPI contract paths, representative legacy parity ids, and not-found behavior.
+Tests should cover the OpenAPI contract paths, representative legacy parity ids, not-found behavior, EF Core schema/seed integrity, and repository behavior.
 
-Unit tests should also cover:
+Unit tests should cover pure backend logic when it exists outside EF Core/API integration boundaries. Integration tests should cover:
 
 - catalog seeder idempotency
 - stable legacy ids and required relationships
