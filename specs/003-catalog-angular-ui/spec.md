@@ -1,6 +1,6 @@
 # Feature Specification: Browse Catalog UI
 
-**Feature Branch**: `003-catalog-angular-ui`
+**Feature Branch**: `003-catalog-angular-ui-sdd`
 
 **Created**: 2026-06-08
 
@@ -15,7 +15,7 @@
 - Q: Should the catalog UI be a separate frontend application? -> A: Yes, place it under a separate frontend area and run it independently from the ASP.NET backend.
 - Q: Should the first UI copy the legacy Java PetStore visual design? -> A: No, build a simple modern catalog browsing UI first and improve styling later.
 - Q: Should the first UI implementation include automated UI tests? -> A: No, validate manually for the first pass.
-- Q: How should the frontend reach the backend during the first pass? -> A: Use the backend host and port directly for now; no development proxy is required yet.
+- Q: How should the frontend reach the backend during local development? -> A: Use the Angular development proxy for `/api/*` so the browser talks to the frontend origin while the dev server forwards API calls to the ASP.NET backend.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -131,7 +131,7 @@ As a store visitor, I want clear feedback when a category, product, or item cann
 
 - The catalog API slice from `specs/002-browse-product-catalog` is available and remains the source of catalog data.
 - The first UI pass is browser-only and read-only.
-- The frontend and backend run as separate local development processes.
+- The frontend and backend run as separate local development processes, with Angular dev proxy forwarding `/api/*` requests to the backend during local development.
 - The first pass favors functional clarity over final visual polish.
 - Automated UI tests are deferred until a later refinement unless the plan phase changes this decision.
 - Cart, checkout, login, account creation, search, localization, recommendations, and admin catalog editing are outside this feature.

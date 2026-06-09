@@ -31,4 +31,4 @@
 
 ## Notes
 
-- Frontend folder, framework, direct backend host/port, and separate process decisions are intentionally deferred to the implementation plan rather than encoded as behavioral requirements.
+- Frontend folder, framework, Angular dev proxy, and separate process decisions are intentionally captured in the implementation plan rather than encoded as behavioral requirements.
