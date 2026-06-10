@@ -70,9 +70,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Implement product list loading and known-category empty state in `frontend/petstore-ui/src/app/catalog/product-list.component.ts`
-- [ ] T019 [US2] Wire category product route parameters to product loading in `frontend/petstore-ui/src/app/app.routes.ts`
-- [ ] T020 [US2] Add product list and card styles in `frontend/petstore-ui/src/styles.css`
+- [X] T018 [US2] Implement product list loading and known-category empty state in `frontend/petstore-ui/src/app/catalog/product-list.component.ts`
+- [X] T019 [US2] Wire category product route parameters to product loading in `frontend/petstore-ui/src/app/app.routes.ts`
+- [X] T020 [US2] Add product list and card styles in `frontend/petstore-ui/src/styles.css`
 - [ ] T021 [US2] Manually validate product browsing per `specs/003-catalog-angular-ui/quickstart.md`
 
 **Checkpoint**: User Stories 1 and 2 work through the same browser flow.
@@ -87,10 +87,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Implement product item list loading and empty item state in `frontend/petstore-ui/src/app/catalog/item-list.component.ts`
-- [ ] T023 [US3] Implement item details loading and display in `frontend/petstore-ui/src/app/catalog/item-detail.component.ts`
-- [ ] T024 [US3] Wire product item and item detail routes in `frontend/petstore-ui/src/app/app.routes.ts`
-- [ ] T025 [US3] Add item list and item detail styles in `frontend/petstore-ui/src/styles.css`
+- [X] T022 [US3] Implement product item list loading and empty item state in `frontend/petstore-ui/src/app/catalog/item-list.component.ts`
+- [X] T023 [US3] Implement item details loading and display in `frontend/petstore-ui/src/app/catalog/item-detail.component.ts`
+- [X] T024 [US3] Wire product item and item detail routes in `frontend/petstore-ui/src/app/app.routes.ts`
+- [X] T025 [US3] Add item list and item detail styles in `frontend/petstore-ui/src/styles.css`
 - [ ] T026 [US3] Manually validate item browsing and item details per `specs/003-catalog-angular-ui/quickstart.md`
 
 **Checkpoint**: The primary categories-to-item-details flow is complete.
@@ -105,10 +105,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T027 [US4] Normalize 404 and network errors in `frontend/petstore-ui/src/app/catalog/catalog-api.service.ts`
-- [ ] T028 [US4] Add route-back actions for missing category states in `frontend/petstore-ui/src/app/catalog/product-list.component.ts`
-- [ ] T029 [US4] Add route-back actions for missing product item states in `frontend/petstore-ui/src/app/catalog/item-list.component.ts`
-- [ ] T030 [US4] Add route-back actions for missing item detail states in `frontend/petstore-ui/src/app/catalog/item-detail.component.ts`
+- [X] T027 [US4] Normalize 404 and network errors in `frontend/petstore-ui/src/app/catalog/catalog-api.service.ts`
+- [X] T028 [US4] Add route-back actions for missing category states in `frontend/petstore-ui/src/app/catalog/product-list.component.ts`
+- [X] T029 [US4] Add route-back actions for missing product item states in `frontend/petstore-ui/src/app/catalog/item-list.component.ts`
+- [X] T030 [US4] Add route-back actions for missing item detail states in `frontend/petstore-ui/src/app/catalog/item-detail.component.ts`
 - [ ] T031 [US4] Manually validate not-found and backend-unavailable scenarios per `specs/003-catalog-angular-ui/quickstart.md`
 
 **Checkpoint**: Missing-data and unavailable-state behavior is complete.
@@ -119,10 +119,10 @@
 
 **Purpose**: Final UI cleanup and local validation for the complete feature.
 
-- [ ] T032 [P] Document frontend run commands and proxy behavior in `frontend/petstore-ui/README.md`
-- [ ] T033 Review visible UI text for clear read-only catalog language in `frontend/petstore-ui/src/app/catalog/catalog-shell.component.ts`, `frontend/petstore-ui/src/app/catalog/category-list.component.ts`, `frontend/petstore-ui/src/app/catalog/product-list.component.ts`, `frontend/petstore-ui/src/app/catalog/item-list.component.ts`, and `frontend/petstore-ui/src/app/catalog/item-detail.component.ts`
+- [X] T032 [P] Document frontend run commands and proxy behavior in `frontend/petstore-ui/README.md`
+- [X] T033 Review visible UI text for clear read-only catalog language in `frontend/petstore-ui/src/app/catalog/catalog-shell.component.ts`, `frontend/petstore-ui/src/app/catalog/category-list.component.ts`, `frontend/petstore-ui/src/app/catalog/product-list.component.ts`, `frontend/petstore-ui/src/app/catalog/item-list.component.ts`, and `frontend/petstore-ui/src/app/catalog/item-detail.component.ts`
 - [ ] T034 Verify responsive layout manually at desktop and narrow mobile widths using `frontend/petstore-ui/src/styles.css`
-- [ ] T035 Run Angular build validation from `frontend/petstore-ui/package.json`
+- [X] T035 Run Angular build validation from `frontend/petstore-ui/package.json`
 - [ ] T036 Run full manual quickstart validation from `specs/003-catalog-angular-ui/quickstart.md`
 
 ---
