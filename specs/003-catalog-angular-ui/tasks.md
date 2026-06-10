@@ -53,10 +53,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Implement category list loading, active-category navigation, and category links in `frontend/petstore-ui/src/app/catalog/category-list.component.ts`
-- [ ] T015 [US1] Wire default catalog and category routes to the category component in `frontend/petstore-ui/src/app/app.routes.ts`
-- [ ] T016 [US1] Add responsive category list styles in `frontend/petstore-ui/src/styles.css`
-- [ ] T017 [US1] Manually validate category browsing per `specs/003-catalog-angular-ui/quickstart.md`
+- [X] T014 [US1] Implement category list loading, active-category navigation, and category links in `frontend/petstore-ui/src/app/catalog/category-list.component.ts`
+- [X] T015 [US1] Wire default catalog and category routes to the category component in `frontend/petstore-ui/src/app/app.routes.ts`
+- [X] T016 [US1] Add responsive category list styles in `frontend/petstore-ui/src/styles.css`
+- [X] T017 [US1] Manually validate category browsing per `specs/003-catalog-angular-ui/quickstart.md`
 
 **Checkpoint**: User Story 1 is fully functional and manually testable independently.
 

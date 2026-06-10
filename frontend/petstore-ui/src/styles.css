@@ -1,1 +1,85 @@
-/* You can add global styles to this file, and also import other style files */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f5f5f5;
+  color: #1a1a1a;
+}
+
+a { color: #0057b8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Shell ── */
+.catalog-header {
+  background: #0057b8;
+  padding: 0.75rem 1.5rem;
+}
+
+.catalog-header__brand {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.catalog-header__brand:hover { text-decoration: none; opacity: 0.85; }
+
+.catalog-main {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* ── Category list ── */
+.category-nav { margin-bottom: 2rem; }
+
+.category-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-list__link {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border: 1px solid #0057b8;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.category-list__link:hover,
+.category-list__link--active {
+  background: #0057b8;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ── States ── */
+.state-loading,
+.state-empty,
+.state-unavailable {
+  padding: 2rem;
+  text-align: center;
+  color: #555;
+  font-size: 1rem;
+}
+
+.state-loading__spinner {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid #ccc;
+  border-top-color: #0057b8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.state-unavailable { color: #b00020; }
