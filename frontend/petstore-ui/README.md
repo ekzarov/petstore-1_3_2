@@ -1,59 +1,66 @@
-# PetstoreUi
+# PetStore Catalog UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.14.
+Read-only Angular catalog browsing UI for the migrated PetStore catalog API
+(`specs/003-catalog-angular-ui`). Covers categories, products, sellable items,
+item details, and loading/empty/not-found/unavailable states. No cart,
+checkout, sign-in, search, or admin features in this slice.
 
-## Development server
+## Prerequisites
 
-To start a local development server, run:
+- Node.js with npm
+- The ASP.NET catalog backend from `dotnet/Petstore` (see
+  `specs/003-catalog-angular-ui/quickstart.md`)
 
-```bash
-ng serve
+## Run locally
+
+Start the backend first:
+
+```powershell
+dotnet run --project dotnet/Petstore/Petstore.csproj
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+The backend listens on `http://localhost:5103`.
 
-## Code scaffolding
+Then start the frontend:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```powershell
+cd frontend/petstore-ui
+npm install
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Open `http://localhost:4200`. The root route redirects to `/catalog`.
 
-```bash
-ng generate --help
+## Dev proxy
+
+The app calls relative `/api/catalog/...` URLs only. During `ng serve`,
+`proxy.conf.json` forwards `/api` requests to `http://localhost:5103`, so the
+browser talks to a single origin and the backend needs no development CORS
+policy.
+
+Notes for Angular 21 (Vite dev server):
+
+- The proxy context key must be `/api` — Vite does not support webpack-style
+  glob keys like `/api/*`.
+- `proxyConfig` is set in `angular.json` under the `serve` target, so the
+  proxy applies to any `ng serve` invocation, not just `npm start`.
+
+## Routes
+
+| Route | View |
+|---|---|
+| `/catalog` | Category list |
+| `/catalog/categories/:categoryId` | Products in a category |
+| `/catalog/products/:productId` | Sellable items for a product (`?category=` preserves the back link) |
+| `/catalog/items/:itemId` | Item details |
+
+## Build
+
+```powershell
+npm run build
 ```
 
-## Building
+## Validation
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Manual validation steps live in `specs/003-catalog-angular-ui/quickstart.md`.
+Automated UI tests are intentionally deferred for this first slice.
