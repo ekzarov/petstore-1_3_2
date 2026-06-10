@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { CatalogApiService, CatalogNotFoundError } from './catalog-api.service';
+import { CatalogApiService } from './catalog-api.service';
 import { CatalogCategory, CatalogViewState } from './catalog.models';
 import { LoadingStateComponent } from '../shared/loading-state.component';
 import { UnavailableStateComponent } from '../shared/unavailable-state.component';
@@ -10,14 +10,14 @@ import { UnavailableStateComponent } from '../shared/unavailable-state.component
   standalone: true,
   imports: [RouterLink, RouterLinkActive, LoadingStateComponent, UnavailableStateComponent],
   template: `
-    @if (state.status === 'loading') {
+    @if (state().status === 'loading') {
       <app-loading-state />
-    } @else if (state.status === 'unavailable') {
+    } @else if (state().status === 'unavailable') {
       <app-unavailable-state />
-    } @else if (state.status === 'ready') {
+    } @else if (state().status === 'ready') {
       <nav class="category-nav" aria-label="Pet categories">
         <ul class="category-list">
-          @for (cat of state.data; track cat.id) {
+          @for (cat of state().data; track cat.id) {
             <li class="category-list__item">
               <a
                 class="category-list__link"
@@ -34,16 +34,12 @@ import { UnavailableStateComponent } from '../shared/unavailable-state.component
 export class CategoryListComponent implements OnInit {
   private readonly api = inject(CatalogApiService);
 
-  state: CatalogViewState<CatalogCategory[]> = { status: 'loading' };
+  readonly state = signal<CatalogViewState<CatalogCategory[]>>({ status: 'loading' });
 
   ngOnInit(): void {
     this.api.getCategories().subscribe({
-      next: (cats) => {
-        this.state = { status: 'ready', data: cats };
-      },
-      error: () => {
-        this.state = { status: 'unavailable' };
-      }
+      next: (cats) => this.state.set({ status: 'ready', data: cats }),
+      error: () => this.state.set({ status: 'unavailable' })
     });
   }
 }
