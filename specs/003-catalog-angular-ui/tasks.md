@@ -32,14 +32,14 @@
 
 **CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T006 Configure standalone Angular app providers and HttpClient in `frontend/petstore-ui/src/app/app.config.ts`
-- [ ] T007 Define catalog route skeletons in `frontend/petstore-ui/src/app/app.routes.ts`
-- [ ] T008 [P] Define catalog API DTOs and view-state types in `frontend/petstore-ui/src/app/catalog/catalog.models.ts`
-- [ ] T009 Implement relative `/api/catalog/...` catalog API service in `frontend/petstore-ui/src/app/catalog/catalog-api.service.ts`
-- [ ] T010 [P] Create reusable loading state component in `frontend/petstore-ui/src/app/shared/loading-state.component.ts`
-- [ ] T011 [P] Create reusable empty state component in `frontend/petstore-ui/src/app/shared/empty-state.component.ts`
-- [ ] T012 [P] Create reusable unavailable/error state component in `frontend/petstore-ui/src/app/shared/unavailable-state.component.ts`
-- [ ] T013 Create catalog shell layout and router outlet in `frontend/petstore-ui/src/app/catalog/catalog-shell.component.ts`
+- [X] T006 Configure standalone Angular app providers and HttpClient in `frontend/petstore-ui/src/app/app.config.ts`
+- [X] T007 Define catalog route skeletons in `frontend/petstore-ui/src/app/app.routes.ts`
+- [X] T008 [P] Define catalog API DTOs and view-state types in `frontend/petstore-ui/src/app/catalog/catalog.models.ts`
+- [X] T009 Implement relative `/api/catalog/...` catalog API service in `frontend/petstore-ui/src/app/catalog/catalog-api.service.ts`
+- [X] T010 [P] Create reusable loading state component in `frontend/petstore-ui/src/app/shared/loading-state.component.ts`
+- [X] T011 [P] Create reusable empty state component in `frontend/petstore-ui/src/app/shared/empty-state.component.ts`
+- [X] T012 [P] Create reusable unavailable/error state component in `frontend/petstore-ui/src/app/shared/unavailable-state.component.ts`
+- [X] T013 Create catalog shell layout and router outlet in `frontend/petstore-ui/src/app/catalog/catalog-shell.component.ts`
 
 **Checkpoint**: The Angular app can start, route to the catalog shell, and make proxied `/api/*` calls through the API service.
 
