@@ -12,6 +12,10 @@ public sealed class PetstoreCatalogContext(DbContextOptions<PetstoreCatalogConte
 
     public DbSet<ItemEntity> Items => Set<ItemEntity>();
 
+    public DbSet<UserEntity> Users => Set<UserEntity>();
+
+    public DbSet<CustomerContactEntity> CustomerContacts => Set<CustomerContactEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

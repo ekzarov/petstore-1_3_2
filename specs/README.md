@@ -17,7 +17,7 @@ invoice/completion.
 | 001 | [Migration strategy](001-migration-strategy/spec.md) | Docs | Done | — |
 | 002 | [Browse product catalog](002-browse-product-catalog/spec.md) | Backend API | Done | 001 |
 | 003 | [Catalog Angular UI](003-catalog-angular-ui/spec.md) | UI | Done | 002 |
-| 004 | [Customer accounts & sign-in](004-customer-accounts/spec.md) | Backend API | Planned | 002 |
+| 004 | [Customer accounts & sign-in](004-customer-accounts/spec.md) | Backend API | Done | 002 |
 | 005 | [Account UI](005-account-ui/spec.md) | UI | Planned | 003, 004 |
 | 006 | [Shopping cart](006-shopping-cart/spec.md) | Backend API | Planned | 002 (anonymous carts), 004 (customer carts) |
 | 007 | [Cart UI](007-cart-ui/spec.md) | UI | Planned | 003, 006 |
