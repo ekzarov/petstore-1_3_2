@@ -14,7 +14,37 @@ a:hover { text-decoration: underline; }
 .catalog-header {
   background: #0057b8;
   padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
+
+.catalog-header__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.catalog-header__signin,
+.catalog-header__user {
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.catalog-header__user { font-weight: 600; }
+
+.catalog-header__signout {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  color: #fff;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.catalog-header__signout:hover { background: rgba(255, 255, 255, 0.15); }
 
 .catalog-header__brand {
   color: #fff;
@@ -221,6 +251,100 @@ a:hover { text-decoration: underline; }
 .item-detail__absent {
   color: #999;
   font-style: italic;
+}
+
+/* ── Identity forms ── */
+.identity-form {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.identity-form--wide { max-width: 640px; }
+
+.identity-form h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.identity-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.identity-form input {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.identity-form input:focus {
+  outline: 2px solid #0057b8;
+  border-color: #0057b8;
+}
+
+.identity-form fieldset {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin: 0;
+}
+
+.identity-form legend {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  padding: 0 0.4rem;
+}
+
+.identity-form button[type='submit'] {
+  background: #0057b8;
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.identity-form button[type='submit']:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.identity-form__error {
+  margin: 0;
+  color: #b00020;
+  font-size: 0.9rem;
+}
+
+.identity-form__success {
+  margin: 0;
+  color: #1b7a2f;
+  font-size: 0.9rem;
+}
+
+.identity-form__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+@media (max-width: 560px) {
+  .identity-form fieldset { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
