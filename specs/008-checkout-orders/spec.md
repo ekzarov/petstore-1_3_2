@@ -8,6 +8,12 @@
 
 **Input**: User description: "Migrate the legacy PetStore checkout behavior to a backend API slice: a signed-in customer turns their cart into an order with shipping and billing details, receives an order id, and can list and view their own orders with status, preserving the legacy purchase order structure and PENDING initial status."
 
+## Clarifications
+
+### Session 2026-06-10
+
+- Q: Billing payment data handling (DP-003)? -> A: No card data is captured or stored; checkout records shipping/billing contact info only.
+
 ## Legacy Evidence *(Principle IV)*
 
 - Legacy components: `src/components/purchaseorder` (purchase order with contact info, credit card, line items), `src/components/uidgen` (unique order id generation), `src/components/lineitem`.
