@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CatalogApiService, CatalogNotFoundError } from './catalog-api.service';
 import { CatalogItem, CatalogViewState } from './catalog.models';
+import { CartService } from '../cart/cart.service';
 import { LoadingStateComponent } from '../shared/loading-state.component';
 import { EmptyStateComponent } from '../shared/empty-state.component';
 import { UnavailableStateComponent } from '../shared/unavailable-state.component';
@@ -42,6 +43,14 @@ import { UnavailableStateComponent } from '../shared/unavailable-state.component
               <span class="item-card__id">{{ item.id }}</span>
               <span class="item-card__price">{{ item.price }} {{ item.currency }}</span>
             </a>
+            <div class="item-card__actions">
+              <button type="button" class="add-to-cart__btn" (click)="addToCart(item.id)" [disabled]="addingId() === item.id">
+                Add to cart
+              </button>
+              @if (addedId() === item.id) {
+                <span class="add-to-cart__confirm">Added</span>
+              }
+            </div>
           </li>
         }
       </ul>
@@ -51,6 +60,25 @@ import { UnavailableStateComponent } from '../shared/unavailable-state.component
 export class ItemListComponent implements OnInit {
   private readonly api = inject(CatalogApiService);
   private readonly route = inject(ActivatedRoute);
+  private readonly cartService = inject(CartService);
+
+  readonly addingId = signal<string | null>(null);
+  readonly addedId = signal<string | null>(null);
+
+  addToCart(itemId: string): void {
+    if (this.addingId()) {
+      return;
+    }
+
+    this.addingId.set(itemId);
+    this.cartService.addItem(itemId).subscribe({
+      next: () => {
+        this.addingId.set(null);
+        this.addedId.set(itemId);
+      },
+      error: () => this.addingId.set(null)
+    });
+  }
 
   readonly productId = signal('');
   readonly categoryId = signal('');

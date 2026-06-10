@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CatalogApiService, CatalogNotFoundError } from './catalog-api.service';
 import { CatalogItem, CatalogViewState } from './catalog.models';
+import { CartService } from '../cart/cart.service';
 import { LoadingStateComponent } from '../shared/loading-state.component';
 import { UnavailableStateComponent } from '../shared/unavailable-state.component';
 
@@ -49,6 +50,17 @@ import { UnavailableStateComponent } from '../shared/unavailable-state.component
           <dt>Price</dt>
           <dd class="item-detail__price">{{ item.price }} {{ item.currency }}</dd>
         </dl>
+        <div class="add-to-cart">
+          <button type="button" class="add-to-cart__btn" (click)="addToCart(item.id)" [disabled]="adding()">
+            Add to cart
+          </button>
+          @if (added()) {
+            <span class="add-to-cart__confirm">Added to cart</span>
+          }
+          @if (addError()) {
+            <span class="add-to-cart__error">{{ addError() }}</span>
+          }
+        </div>
       </article>
     }
   `
@@ -56,6 +68,31 @@ import { UnavailableStateComponent } from '../shared/unavailable-state.component
 export class ItemDetailComponent implements OnInit {
   private readonly api = inject(CatalogApiService);
   private readonly route = inject(ActivatedRoute);
+  private readonly cartService = inject(CartService);
+
+  readonly adding = signal(false);
+  readonly added = signal(false);
+  readonly addError = signal<string | null>(null);
+
+  addToCart(itemId: string): void {
+    if (this.adding()) {
+      return;
+    }
+
+    this.adding.set(true);
+    this.added.set(false);
+    this.addError.set(null);
+    this.cartService.addItem(itemId).subscribe({
+      next: () => {
+        this.adding.set(false);
+        this.added.set(true);
+      },
+      error: () => {
+        this.adding.set(false);
+        this.addError.set('Could not add to cart. Please try again.');
+      }
+    });
+  }
 
   readonly itemId = signal('');
   readonly state = signal<CatalogViewState<CatalogItem>>({ status: 'loading' });
