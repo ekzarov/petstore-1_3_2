@@ -19,6 +19,8 @@ builder.Services.AddDbContext<PetstoreCatalogContext>(options =>
         ?? throw new InvalidOperationException("Connection string 'PetstoreCatalog' is not configured.")));
 builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<Petstore.Cart.ICartRepository, Petstore.Cart.CartRepository>();
+builder.Services.AddScoped<Petstore.Cart.CartViewBuilder>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddSingleton<JwtTokenService>();
 
