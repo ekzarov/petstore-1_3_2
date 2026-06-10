@@ -8,6 +8,16 @@
 
 **Input**: User description: "Migrate the legacy PetStore customer account behavior to a backend API slice: create an account, sign in, sign out, and view/update account contact details, preserving parity with the legacy signon and customer components so the future cart and checkout slices can attach orders to a known customer."
 
+## Clarifications
+
+### Session 2026-06-10
+
+- Q: Session mechanism (DP-001)? -> A: JWT bearer tokens; Angular stores the token and sends it in the Authorization header. Sign-out is client-side token discard with a short token lifetime (documented simplification of FR-004).
+- Q: Credit card storage (DP-002)? -> A: Not stored at all; checkout collects no card data. Card fields can be added in a later feature.
+- Q: Profile preferences (DP-003)? -> A: Deferred; not migrated in this slice.
+- Q: Password storage detail? -> A: Per-user random salt and PBKDF2 hash stored in the users table; no e-mail confirmation, password recovery, or lockout in this slice.
+- Q: Admin identity (relates to 010 DP-002)? -> A: A role column in the same users table (`customer` | `admin`); one sign-in mechanism, authorization by role.
+
 ## Legacy Evidence *(Principle IV)*
 
 - Legacy components: `src/components/signon` (user id + password authentication), `src/components/customer` (Account, Profile), `src/components/contactinfo`, `src/components/address`, `src/components/creditcard`.

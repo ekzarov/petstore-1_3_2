@@ -8,6 +8,12 @@
 
 **Input**: User description: "Migrate the legacy OPC (Order Processing Center) behavior: placed orders move through the legacy status lifecycle — small orders are approved automatically, larger orders await an explicit approval decision, denied orders stop, approved orders are handed to supplier fulfillment, and customers can see status changes in their order history. Includes the customer notification behavior as a decision point."
 
+## Clarifications
+
+### Session 2026-06-10
+
+- Q: Admin identity (DP-002)? -> A: Role column in the shared users table from feature 004; decision endpoints require the `admin` role via JWT.
+
 ## Legacy Evidence *(Principle IV)*
 
 - Legacy apps/components: `src/apps/opc` (purchase order intake, customer relations, transitions), `src/components/processmanager` (workflow state per order), `src/components/asyncsender` (JMS submission), `src/components/mailer` (JavaMail notifications), `src/components/xmldocuments` (XML purchase order/invoice documents with XSD/DTD validation).
