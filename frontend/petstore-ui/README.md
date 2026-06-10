@@ -53,6 +53,19 @@ Notes for Angular 21 (Vite dev server):
 | `/catalog/categories/:categoryId` | Products in a category |
 | `/catalog/products/:productId` | Sellable items for a product (`?category=` preserves the back link) |
 | `/catalog/items/:itemId` | Item details |
+| `/signin` | Sign in (seeded users: `j2ee`/`j2ee`, `shopper`/`j2ee`, `admin`/`admin`) |
+| `/register` | Create an account (auto signs in on success) |
+| `/account` | View/edit contact details (requires sign-in; anonymous visitors are redirected) |
+
+## Identity
+
+Sign-in calls `POST /api/auth/signin` and stores the JWT response under the
+`localStorage` key `petstore.token`. An HTTP interceptor adds
+`Authorization: Bearer <token>` to API calls and treats any 401 outside
+`/api/auth/*` as an expired session: it clears the stored identity and
+redirects to `/signin` with a `returnUrl`. Sign-out simply discards the
+stored token. Passwords are never stored in the browser. Catalog browsing
+needs no sign-in.
 
 ## Build
 
