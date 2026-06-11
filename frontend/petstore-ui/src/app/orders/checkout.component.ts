@@ -61,7 +61,8 @@ import { LoadingStateComponent } from '../shared/loading-state.component';
           </tbody>
         </table>
         <p class="cart-summary__total">
-          Total ({{ cart().itemCount }} items): <strong>{{ cart().total }} {{ cart().currency }}</strong>
+          Total ({{ cart().lines.length }} items, {{ cart().itemCount }} units):
+          <strong>{{ cart().total }} {{ cart().currency }}</strong>
         </p>
         <p class="identity-form__hint"><a routerLink="/cart">Edit cart</a></p>
       </section>

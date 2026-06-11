@@ -58,7 +58,8 @@ import { CartService } from './cart.service';
 
       <div class="cart-summary">
         <p class="cart-summary__total">
-          Total ({{ cart().itemCount }} items): <strong>{{ cart().total }} {{ cart().currency }}</strong>
+          Total ({{ cart().lines.length }} items, {{ cart().itemCount }} units):
+          <strong>{{ cart().total }} {{ cart().currency }}</strong>
         </p>
         <div class="cart-summary__actions">
           <button type="button" class="cart-empty-btn" (click)="empty()" [disabled]="busy()">Empty cart</button>
