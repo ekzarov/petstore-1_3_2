@@ -51,6 +51,49 @@ public sealed class AdminOrdersController(
         return Ok(orders);
     }
 
+    [HttpGet("{orderId}")]
+    [ProducesResponseType<AdminOrderDetailDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ApiErrorDto>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<AdminOrderDetailDto>> GetOrderAsync(string orderId, CancellationToken cancellationToken)
+    {
+        if (!int.TryParse(orderId, out var id))
+        {
+            return NotFound(new ApiErrorDto("orders.not_found", "Order was not found."));
+        }
+
+        var order = await context.Orders
+            .AsNoTracking()
+            .Include(o => o.Lines)
+            .SingleOrDefaultAsync(o => o.Id == id, cancellationToken);
+        if (order is null)
+        {
+            return NotFound(new ApiErrorDto("orders.not_found", "Order was not found."));
+        }
+
+        return Ok(new AdminOrderDetailDto(
+            order.Id.ToString(),
+            order.PlacedAt,
+            order.UserId,
+            order.Status,
+            order.Total,
+            order.Currency,
+            ToContactDto(order.ShippingContact),
+            ToContactDto(order.BillingContact),
+            order.Lines
+                .OrderBy(line => line.ItemId)
+                .Select(line => new OrderLineDto(
+                    line.ItemId, line.Name, line.UnitPrice, line.Currency, line.Quantity,
+                    line.UnitPrice * line.Quantity))
+                .ToList()));
+    }
+
+    private static ContactInfoDto ToContactDto(Petstore.Data.Entities.OrderContactBlock contact)
+    {
+        return new ContactInfoDto(
+            contact.FamilyName, contact.GivenName, contact.Street1, contact.Street2,
+            contact.City, contact.State, contact.Zip, contact.Country, contact.Email, contact.Phone);
+    }
+
     [HttpPost("{orderId}/approve")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType<ApiErrorDto>(StatusCodes.Status409Conflict)]
