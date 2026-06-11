@@ -12,6 +12,12 @@ import { CheckoutComponent } from './orders/checkout.component';
 import { OrderListComponent } from './orders/order-list.component';
 import { OrderDetailComponent } from './orders/order-detail.component';
 import { authGuard } from './identity/auth.guard';
+import { adminGuard } from './admin/admin.guard';
+import { AdminShellComponent } from './admin/admin-shell.component';
+import { PendingOrdersComponent } from './admin/pending-orders.component';
+import { AdminOrderListComponent } from './admin/admin-order-list.component';
+import { AdminOrderDetailComponent } from './admin/admin-order-detail.component';
+import { InventoryComponent } from './admin/inventory.component';
 
 export const routes: Routes = [
   {
@@ -34,7 +40,19 @@ export const routes: Routes = [
       { path: 'orders/:orderId', component: OrderDetailComponent, canActivate: [authGuard] },
       { path: 'signin', component: SignInComponent },
       { path: 'register', component: RegisterComponent },
-      { path: 'account', component: AccountComponent, canActivate: [authGuard] }
+      { path: 'account', component: AccountComponent, canActivate: [authGuard] },
+      {
+        path: 'admin',
+        component: AdminShellComponent,
+        canActivate: [adminGuard],
+        children: [
+          { path: '', redirectTo: 'pending', pathMatch: 'full' },
+          { path: 'pending', component: PendingOrdersComponent },
+          { path: 'orders', component: AdminOrderListComponent },
+          { path: 'orders/:orderId', component: AdminOrderDetailComponent },
+          { path: 'inventory', component: InventoryComponent }
+        ]
+      }
     ]
   }
 ];

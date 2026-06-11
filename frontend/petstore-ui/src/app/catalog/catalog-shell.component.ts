@@ -17,6 +17,9 @@ import { CartService } from '../cart/cart.service';
             <span class="catalog-header__cart-count">{{ cartService.itemCount() }}</span>
           }
         </a>
+        @if (identity.isAdmin()) {
+          <a routerLink="/admin" class="catalog-header__signin">Admin</a>
+        }
         @if (identity.isSignedIn()) {
           <a routerLink="/orders" class="catalog-header__signin">Orders</a>
           <a routerLink="/account" class="catalog-header__user">{{ identity.userId() }}</a>

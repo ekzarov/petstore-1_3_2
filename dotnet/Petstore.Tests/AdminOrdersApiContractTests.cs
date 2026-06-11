@@ -113,6 +113,29 @@ public sealed class AdminOrdersApiContractTests(PetstoreCatalogTestsFixture fixt
     }
 
     [Fact]
+    public async Task Admin_Can_Read_Any_Order_Detail()
+    {
+        using var factory = new CatalogApiFactory(Fixture.ConnectionString);
+        using var customer = await SignInClientAsync(factory, "j2ee", "j2ee");
+        var order = await PlaceOrderAsync(customer, 31);
+
+        using var admin = await SignInClientAsync(factory, "admin", "admin");
+        var detail = await admin.GetFromJsonAsync<AdminOrderDetailDto>($"/api/admin/orders/{order.OrderId}");
+
+        Assert.NotNull(detail);
+        Assert.Equal(order.OrderId, detail.OrderId);
+        Assert.Equal("j2ee", detail.UserId);
+        Assert.Equal("PENDING", detail.Status);
+        var line = Assert.Single(detail.Lines);
+        Assert.Equal("EST-1", line.ItemId);
+        Assert.Equal(31, line.Quantity);
+        Assert.Equal("Doe", detail.ShippingContact.FamilyName);
+
+        var unknown = await admin.GetAsync("/api/admin/orders/999999");
+        Assert.Equal(HttpStatusCode.NotFound, unknown.StatusCode);
+    }
+
+    [Fact]
     public async Task Invalid_Status_Filter_Is_Rejected()
     {
         using var factory = new CatalogApiFactory(Fixture.ConnectionString);
