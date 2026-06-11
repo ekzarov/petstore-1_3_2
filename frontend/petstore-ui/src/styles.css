@@ -410,6 +410,54 @@ a:hover { text-decoration: underline; }
   gap: 0.6rem;
 }
 
+/* ── Orders & checkout ── */
+.order-status {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.order-status--pending { background: #fff3cd; color: #856404; }
+.order-status--approved { background: #d4edda; color: #155724; }
+.order-status--denied { background: #f8d7da; color: #721c24; }
+.order-status--shipped-part { background: #cce5ff; color: #004085; }
+.order-status--shipped { background: #cce5ff; color: #004085; }
+.order-status--completed { background: #d4edda; color: #155724; }
+
+.checkout-review { margin-bottom: 1.5rem; }
+
+.checkout-review h2 { font-size: 1.1rem; margin: 0 0 0.75rem; }
+
+.checkout-billing-toggle {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem !important;
+}
+
+.checkout-confirmation {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.checkout-confirmation h1 { margin: 0 0 1rem; font-size: 1.4rem; }
+
+.checkout-confirmation__total { font-size: 1.1rem; }
+
+.order-detail__contact h2 { font-size: 1rem; margin: 1.25rem 0 0.4rem; }
+
+.order-detail__contact p { color: #444; line-height: 1.5; }
+
+a.cart-checkout-btn:hover { text-decoration: none; opacity: 0.9; }
+
 /* ── Identity forms ── */
 .identity-form {
   background: #fff;

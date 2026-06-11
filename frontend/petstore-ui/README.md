@@ -54,6 +54,9 @@ Notes for Angular 21 (Vite dev server):
 | `/catalog/products/:productId` | Sellable items for a product (`?category=` preserves the back link) |
 | `/catalog/items/:itemId` | Item details |
 | `/cart` | Shopping cart (lines, quantity stepper, remove, empty; works signed out) |
+| `/checkout` | Order review + shipping/billing details + placement (requires sign-in) |
+| `/orders` | Order history with status badges (requires sign-in) |
+| `/orders/:orderId` | Order details: lines, totals, shipping, status (requires sign-in) |
 | `/signin` | Sign in (seeded users: `j2ee`/`j2ee`, `shopper`/`j2ee`, `admin`/`admin`) |
 | `/register` | Create an account (auto signs in on success) |
 | `/account` | View/edit contact details (requires sign-in; anonymous visitors are redirected) |
@@ -77,6 +80,17 @@ the UI never computes totals. After sign-in the backend merges the anonymous
 cart into the user cart on the first cart call; the `CartService` reloads the
 cart whenever the identity changes, so the merge is visible immediately. The
 header cart indicator shows the backend item count on every route.
+
+## Checkout & orders
+
+Checkout starts from the cart's Checkout button and requires sign-in (the
+guard round-trips through `/signin` with a `returnUrl`). The review step shows
+the backend cart and a shipping form prefilled from the account contact; a
+"billing same as shipping" toggle controls whether a separate billing block is
+sent. The place-order button disables while submitting; the backend's
+empty-cart guard is the authoritative double-submit protection. All totals
+come from API responses. Order statuses are displayed verbatim
+(`PENDING`, `APPROVED`, …) as colored badges.
 
 ## Build
 

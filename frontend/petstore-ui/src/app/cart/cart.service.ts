@@ -14,7 +14,8 @@ export class CartService {
   private readonly cartState = signal<Cart>(EMPTY_CART);
 
   readonly cart = this.cartState.asReadonly();
-  readonly itemCount = computed(() => this.cartState().itemCount);
+  // Header badge counts distinct cart lines, not total units.
+  readonly itemCount = computed(() => this.cartState().lines.filter((line) => !line.unavailable).length);
 
   constructor() {
     // Reload the cart whenever the signed-in identity changes so the

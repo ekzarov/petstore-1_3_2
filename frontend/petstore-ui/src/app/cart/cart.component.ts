@@ -58,11 +58,12 @@ import { CartService } from './cart.service';
 
       <div class="cart-summary">
         <p class="cart-summary__total">
-          Total ({{ cart().itemCount }} items): <strong>{{ cart().total }} {{ cart().currency }}</strong>
+          Total ({{ cart().lines.length }} items, {{ cart().itemCount }} units):
+          <strong>{{ cart().total }} {{ cart().currency }}</strong>
         </p>
         <div class="cart-summary__actions">
           <button type="button" class="cart-empty-btn" (click)="empty()" [disabled]="busy()">Empty cart</button>
-          <button type="button" class="cart-checkout-btn" disabled title="Checkout arrives in a later feature">Checkout</button>
+          <a class="cart-checkout-btn" routerLink="/checkout">Checkout</a>
         </div>
       </div>
     }
