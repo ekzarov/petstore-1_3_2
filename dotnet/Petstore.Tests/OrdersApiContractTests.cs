@@ -42,7 +42,7 @@ public sealed class OrdersApiContractTests(PetstoreCatalogTestsFixture fixture) 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.NotNull(order);
         Assert.False(string.IsNullOrWhiteSpace(order.OrderId));
-        Assert.Equal("PENDING", order.Status);
+        Assert.Equal("APPROVED", order.Status); // below the 500 auto-approval threshold (feature 010)
         Assert.Equal(2, order.Lines.Count);
         Assert.Equal(16.50m * 3, order.Total);
         Assert.Equal("USD", order.Currency);
@@ -136,7 +136,7 @@ public sealed class OrdersApiContractTests(PetstoreCatalogTestsFixture fixture) 
         Assert.NotNull(list);
         var summary = Assert.Single(list);
         Assert.Equal(created!.OrderId, summary.OrderId);
-        Assert.Equal("PENDING", summary.Status);
+        Assert.Equal("APPROVED", summary.Status);
         Assert.Equal(created.Total, summary.Total);
 
         var detail = await client.GetFromJsonAsync<OrderDto>($"/api/orders/{created.OrderId}");

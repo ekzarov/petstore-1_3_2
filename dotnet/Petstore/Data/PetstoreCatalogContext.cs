@@ -24,6 +24,8 @@ public sealed class PetstoreCatalogContext(DbContextOptions<PetstoreCatalogConte
 
     public DbSet<OrderLineEntity> OrderLines => Set<OrderLineEntity>();
 
+    public DbSet<OrderStatusTransitionEntity> OrderStatusTransitions => Set<OrderStatusTransitionEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

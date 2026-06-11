@@ -20,7 +20,8 @@ public sealed record PlacementResult(
 
 public sealed class OrderPlacementService(
     PetstoreCatalogContext context,
-    ICatalogRepository catalogRepository)
+    ICatalogRepository catalogRepository,
+    OrderProcessing.IOrderProcessingService processingService)
 {
     public async Task<PlacementResult> PlaceOrderAsync(
         string userId,
@@ -74,6 +75,14 @@ public sealed class OrderPlacementService(
         context.Orders.Add(order);
         context.CartLines.RemoveRange(cartLines);
         await context.SaveChangesAsync(cancellationToken);
+
+        // Synchronous evaluation after commit (010 DD-001): auto-approves
+        // below-threshold orders; larger orders stay PENDING.
+        await processingService.EvaluateNewOrderAsync(order.Id, cancellationToken);
+        order.Status = await context.Orders
+            .Where(o => o.Id == order.Id)
+            .Select(o => o.Status)
+            .SingleAsync(cancellationToken);
 
         return PlacementResult.Success(order);
     }
