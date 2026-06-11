@@ -20,6 +20,10 @@ public sealed class PetstoreCatalogContext(DbContextOptions<PetstoreCatalogConte
 
     public DbSet<CartLineEntity> CartLines => Set<CartLineEntity>();
 
+    public DbSet<OrderEntity> Orders => Set<OrderEntity>();
+
+    public DbSet<OrderLineEntity> OrderLines => Set<OrderLineEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
