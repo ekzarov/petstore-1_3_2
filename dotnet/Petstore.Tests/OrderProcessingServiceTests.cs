@@ -61,7 +61,7 @@ public sealed class OrderProcessingServiceTests(PetstoreCatalogTestsFixture fixt
         var orderId = await CreateOrderAsync(499.99m);
 
         await using var context = Fixture.CreateContext();
-        var service = new OrderProcessingService(context, new OrderTransitionRepository(context), ConfigWithThreshold(500m));
+        var service = new OrderProcessingService(context, new OrderTransitionRepository(context), ConfigWithThreshold(500m), new Petstore.Supplier.FulfillmentService(context, new Petstore.Supplier.InventoryRepository(context), new OrderTransitionRepository(context)));
         await service.EvaluateNewOrderAsync(orderId, CancellationToken.None);
 
         var order = await context.Orders.AsNoTracking().SingleAsync(o => o.Id == orderId);
@@ -79,7 +79,7 @@ public sealed class OrderProcessingServiceTests(PetstoreCatalogTestsFixture fixt
         var orderId = await CreateOrderAsync(500m);
 
         await using var context = Fixture.CreateContext();
-        var service = new OrderProcessingService(context, new OrderTransitionRepository(context), ConfigWithThreshold(500m));
+        var service = new OrderProcessingService(context, new OrderTransitionRepository(context), ConfigWithThreshold(500m), new Petstore.Supplier.FulfillmentService(context, new Petstore.Supplier.InventoryRepository(context), new OrderTransitionRepository(context)));
         await service.EvaluateNewOrderAsync(orderId, CancellationToken.None);
 
         var order = await context.Orders.AsNoTracking().SingleAsync(o => o.Id == orderId);
@@ -93,7 +93,7 @@ public sealed class OrderProcessingServiceTests(PetstoreCatalogTestsFixture fixt
         var orderId = await CreateOrderAsync(100m);
 
         await using var context = Fixture.CreateContext();
-        var service = new OrderProcessingService(context, new OrderTransitionRepository(context), ConfigWithThreshold(500m));
+        var service = new OrderProcessingService(context, new OrderTransitionRepository(context), ConfigWithThreshold(500m), new Petstore.Supplier.FulfillmentService(context, new Petstore.Supplier.InventoryRepository(context), new OrderTransitionRepository(context)));
         await service.EvaluateNewOrderAsync(orderId, CancellationToken.None);
         await service.EvaluateNewOrderAsync(orderId, CancellationToken.None);
 

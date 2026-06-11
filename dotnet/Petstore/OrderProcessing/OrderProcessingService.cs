@@ -1,13 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Petstore.Data;
 using Petstore.Orders;
+using Petstore.Supplier;
 
 namespace Petstore.OrderProcessing;
 
 public sealed class OrderProcessingService(
     PetstoreCatalogContext context,
     OrderTransitionRepository transitionRepository,
-    IConfiguration configuration) : IOrderProcessingService
+    IConfiguration configuration,
+    IFulfillmentService fulfillmentService) : IOrderProcessingService
 {
     public async Task EvaluateNewOrderAsync(int orderId, CancellationToken cancellationToken)
     {
@@ -22,15 +24,26 @@ public sealed class OrderProcessingService(
         var threshold = configuration.GetValue("OrderProcessing:AutoApprovalThreshold", 500m);
         if (order.Total < threshold)
         {
-            await transitionRepository.TryTransitionAsync(
+            var approved = await transitionRepository.TryTransitionAsync(
                 orderId, OrderStatus.Pending, OrderStatus.Approved, OrderWorkflow.SystemActor, cancellationToken);
+            if (approved)
+            {
+                await fulfillmentService.FulfillOrderAsync(orderId, cancellationToken);
+            }
         }
     }
 
-    public Task<bool> ApproveAsync(int orderId, string actor, CancellationToken cancellationToken)
+    public async Task<bool> ApproveAsync(int orderId, string actor, CancellationToken cancellationToken)
     {
-        return transitionRepository.TryTransitionAsync(
+        var approved = await transitionRepository.TryTransitionAsync(
             orderId, OrderStatus.Pending, OrderStatus.Approved, actor, cancellationToken);
+        if (approved)
+        {
+            // Approved orders go straight to fulfillment (011 DD-001).
+            await fulfillmentService.FulfillOrderAsync(orderId, cancellationToken);
+        }
+
+        return approved;
     }
 
     public Task<bool> DenyAsync(int orderId, string actor, CancellationToken cancellationToken)
