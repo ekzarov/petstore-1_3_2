@@ -23,6 +23,8 @@ builder.Services.AddScoped<Petstore.Cart.ICartRepository, Petstore.Cart.CartRepo
 builder.Services.AddScoped<Petstore.Cart.CartViewBuilder>();
 builder.Services.AddScoped<Petstore.Orders.IOrderRepository, Petstore.Orders.OrderRepository>();
 builder.Services.AddScoped<Petstore.Orders.OrderPlacementService>();
+builder.Services.AddScoped<Petstore.OrderProcessing.OrderTransitionRepository>();
+builder.Services.AddScoped<Petstore.OrderProcessing.IOrderProcessingService, Petstore.OrderProcessing.OrderProcessingService>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddSingleton<JwtTokenService>();
 

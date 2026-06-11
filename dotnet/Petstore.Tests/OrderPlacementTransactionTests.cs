@@ -62,7 +62,7 @@ public sealed class OrderPlacementTransactionTests(PetstoreCatalogTestsFixture f
             .SingleAsync(order => order.Id == int.Parse(created.OrderId));
 
         Assert.Equal("j2ee", stored.UserId);
-        Assert.Equal("PENDING", stored.Status);
+        Assert.Equal("APPROVED", stored.Status); // auto-approved below threshold (feature 010)
         Assert.Equal("USD", stored.Currency);
         Assert.True(stored.Total > 0);
         Assert.True(stored.PlacedAt > DateTime.UtcNow.AddMinutes(-5));
