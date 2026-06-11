@@ -36,7 +36,8 @@ public sealed class AdminOrdersApiContractTests(PetstoreCatalogTestsFixture fixt
 
         var order = await PlaceOrderAsync(customer, 1);
 
-        Assert.Equal("APPROVED", order.Status);
+        // Auto-approved, then fulfilled from seeded inventory (feature 011).
+        Assert.Equal("COMPLETED", order.Status);
     }
 
     [Fact]
@@ -52,18 +53,19 @@ public sealed class AdminOrdersApiContractTests(PetstoreCatalogTestsFixture fixt
         Assert.Equal(HttpStatusCode.OK, approve.StatusCode);
 
         // Customer sees the change through the unchanged 008 read API.
+        // Approval triggers fulfillment (011), so the order completes.
         var detail = await customer.GetFromJsonAsync<OrderDto>($"/api/orders/{order.OrderId}");
         Assert.NotNull(detail);
-        Assert.Equal("APPROVED", detail.Status);
+        Assert.Equal("COMPLETED", detail.Status);
 
-        // Audit trail records the admin actor.
+        // Audit trail: the admin decision plus the system fulfillment hops.
         var transitions = await admin.GetFromJsonAsync<IReadOnlyList<OrderTransitionDto>>(
             $"/api/admin/orders/{order.OrderId}/transitions");
         Assert.NotNull(transitions);
-        var transition = Assert.Single(transitions);
-        Assert.Equal("PENDING", transition.FromStatus);
-        Assert.Equal("APPROVED", transition.ToStatus);
-        Assert.Equal("admin", transition.Actor);
+        Assert.Equal(3, transitions.Count);
+        Assert.Equal(("PENDING", "APPROVED", "admin"), (transitions[0].FromStatus, transitions[0].ToStatus, transitions[0].Actor));
+        Assert.Equal(("APPROVED", "SHIPPED", "system"), (transitions[1].FromStatus, transitions[1].ToStatus, transitions[1].Actor));
+        Assert.Equal(("SHIPPED", "COMPLETED", "system"), (transitions[2].FromStatus, transitions[2].ToStatus, transitions[2].Actor));
     }
 
     [Fact]
@@ -94,18 +96,18 @@ public sealed class AdminOrdersApiContractTests(PetstoreCatalogTestsFixture fixt
     {
         using var factory = new CatalogApiFactory(Fixture.ConnectionString);
         using var customer = await SignInClientAsync(factory, "j2ee", "j2ee");
-        var small = await PlaceOrderAsync(customer, 1);   // APPROVED
+        var small = await PlaceOrderAsync(customer, 1);   // COMPLETED (auto-approved + fulfilled)
         var large = await PlaceOrderAsync(customer, 31);  // PENDING
 
         using var admin = await SignInClientAsync(factory, "admin", "admin");
         var pending = await admin.GetFromJsonAsync<IReadOnlyList<AdminOrderSummaryDto>>("/api/admin/orders?status=PENDING");
-        var approved = await admin.GetFromJsonAsync<IReadOnlyList<AdminOrderSummaryDto>>("/api/admin/orders?status=APPROVED");
+        var completed = await admin.GetFromJsonAsync<IReadOnlyList<AdminOrderSummaryDto>>("/api/admin/orders?status=COMPLETED");
 
         Assert.NotNull(pending);
-        Assert.NotNull(approved);
+        Assert.NotNull(completed);
         Assert.Contains(pending, o => o.OrderId == large.OrderId);
         Assert.DoesNotContain(pending, o => o.OrderId == small.OrderId);
-        Assert.Contains(approved, o => o.OrderId == small.OrderId);
+        Assert.Contains(completed, o => o.OrderId == small.OrderId);
         Assert.All(pending, o => Assert.Equal("PENDING", o.Status));
         Assert.All(pending, o => Assert.Equal("j2ee", o.UserId));
     }

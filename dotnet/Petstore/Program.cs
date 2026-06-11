@@ -25,6 +25,8 @@ builder.Services.AddScoped<Petstore.Orders.IOrderRepository, Petstore.Orders.Ord
 builder.Services.AddScoped<Petstore.Orders.OrderPlacementService>();
 builder.Services.AddScoped<Petstore.OrderProcessing.OrderTransitionRepository>();
 builder.Services.AddScoped<Petstore.OrderProcessing.IOrderProcessingService, Petstore.OrderProcessing.OrderProcessingService>();
+builder.Services.AddScoped<Petstore.Supplier.IInventoryRepository, Petstore.Supplier.InventoryRepository>();
+builder.Services.AddScoped<Petstore.Supplier.IFulfillmentService, Petstore.Supplier.FulfillmentService>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddSingleton<JwtTokenService>();
 
@@ -71,6 +73,7 @@ using (var scope = app.Services.CreateScope())
     if (await context.Database.CanConnectAsync())
     {
         await AccountSeeder.SeedAsync(context, passwordHasher);
+        await Petstore.Supplier.InventorySeeder.SeedAsync(context);
     }
 }
 

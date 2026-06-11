@@ -14,5 +14,7 @@ public sealed class OrderLineEntity
 
     public required int Quantity { get; set; }
 
+    public int QuantityShipped { get; set; }
+
     public OrderEntity? Order { get; set; }
 }
