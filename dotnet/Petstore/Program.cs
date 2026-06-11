@@ -21,6 +21,8 @@ builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<Petstore.Cart.ICartRepository, Petstore.Cart.CartRepository>();
 builder.Services.AddScoped<Petstore.Cart.CartViewBuilder>();
+builder.Services.AddScoped<Petstore.Orders.IOrderRepository, Petstore.Orders.OrderRepository>();
+builder.Services.AddScoped<Petstore.Orders.OrderPlacementService>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddSingleton<JwtTokenService>();
 
