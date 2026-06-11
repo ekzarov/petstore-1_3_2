@@ -62,7 +62,7 @@ import { CartService } from './cart.service';
         </p>
         <div class="cart-summary__actions">
           <button type="button" class="cart-empty-btn" (click)="empty()" [disabled]="busy()">Empty cart</button>
-          <button type="button" class="cart-checkout-btn" disabled title="Checkout arrives in a later feature">Checkout</button>
+          <a class="cart-checkout-btn" routerLink="/checkout">Checkout</a>
         </div>
       </div>
     }

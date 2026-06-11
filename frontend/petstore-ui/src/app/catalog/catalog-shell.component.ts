@@ -18,6 +18,7 @@ import { CartService } from '../cart/cart.service';
           }
         </a>
         @if (identity.isSignedIn()) {
+          <a routerLink="/orders" class="catalog-header__signin">Orders</a>
           <a routerLink="/account" class="catalog-header__user">{{ identity.userId() }}</a>
           <button type="button" class="catalog-header__signout" (click)="signOut()">Sign out</button>
         } @else {
