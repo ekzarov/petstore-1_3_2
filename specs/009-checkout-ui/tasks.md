@@ -14,7 +14,7 @@
 - [X] T003 [US1] Create checkout component (review lines/totals, editable shipping prefilled from account, same-as-shipping billing toggle, disabled-on-submit place button, confirmation state with order id) in `frontend/petstore-ui/src/app/orders/checkout.component.ts`
 - [X] T004 [US1] Activate the checkout button in `frontend/petstore-ui/src/app/cart/cart.component.ts` and wire the guarded `/checkout` route in `frontend/petstore-ui/src/app/app.routes.ts`
 - [X] T005 [P] [US1] Add checkout/confirmation styles in `frontend/petstore-ui/src/styles.css`
-- [ ] T006 [US1] Manually validate: signed-in checkout, anonymous redirect round-trip, double-click placement, validation errors, cart indicator drop to zero
+- [X] T006 [US1] Manually validate: signed-in checkout, anonymous redirect round-trip, double-click placement, validation errors, cart indicator drop to zero
 
 ## Phase 3: User Story 2 - Browse Order History (P1)
 
@@ -22,12 +22,12 @@
 - [X] T008 [US2] Create order detail component (lines, shipping details, total, status, not-found state) in `frontend/petstore-ui/src/app/orders/order-detail.component.ts`
 - [X] T009 [US2] Wire guarded `/orders` and `/orders/:orderId` routes and an orders link in the shell header in `frontend/petstore-ui/src/app/app.routes.ts` and `frontend/petstore-ui/src/app/catalog/catalog-shell.component.ts`
 - [X] T010 [P] [US2] Add order list/detail/status-badge styles in `frontend/petstore-ui/src/styles.css`
-- [ ] T011 [US2] Manually validate history list, details, refresh, unknown/foreign order not-found
+- [X] T011 [US2] Manually validate history list, details, refresh, unknown/foreign order not-found
 
 ## Phase 4: Polish
 
 - [X] T012 [P] Document checkout and orders flows in `frontend/petstore-ui/README.md`
-- [ ] T013 Run `npx ng build` and the full end-to-end manual quickstart (account → catalog → cart → checkout → history) under five minutes
+- [X] T013 Run `npx ng build` and the full end-to-end manual quickstart (account → catalog → cart → checkout → history) under five minutes
 
 ## Dependencies
 

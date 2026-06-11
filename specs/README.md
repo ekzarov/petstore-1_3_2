@@ -22,7 +22,7 @@ invoice/completion.
 | 006 | [Shopping cart](006-shopping-cart/spec.md) | Backend API | Done | 002 (anonymous carts), 004 (customer carts) |
 | 007 | [Cart UI](007-cart-ui/spec.md) | UI | Done | 003, 006 |
 | 008 | [Checkout & orders](008-checkout-orders/spec.md) | Backend API | Done | 004, 006 |
-| 009 | [Checkout & order history UI](009-checkout-ui/spec.md) | UI | Planned | 005, 007, 008 |
+| 009 | [Checkout & order history UI](009-checkout-ui/spec.md) | UI | Done | 005, 007, 008 |
 | 010 | [Order processing & approval](010-order-processing/spec.md) | Backend | Planned | 008 |
 | 011 | [Supplier fulfillment](011-supplier-fulfillment/spec.md) | Backend | Planned | 010 |
 | 012 | [Admin orders & inventory UI](012-admin-ui/spec.md) | UI | Planned | 010, 011 |
