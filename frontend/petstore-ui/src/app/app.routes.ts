@@ -7,6 +7,7 @@ import { ItemDetailComponent } from './catalog/item-detail.component';
 import { SignInComponent } from './identity/sign-in.component';
 import { RegisterComponent } from './identity/register.component';
 import { AccountComponent } from './account/account.component';
+import { CartComponent } from './cart/cart.component';
 import { authGuard } from './identity/auth.guard';
 
 export const routes: Routes = [
@@ -24,6 +25,7 @@ export const routes: Routes = [
           { path: 'items/:itemId', component: ItemDetailComponent }
         ]
       },
+      { path: 'cart', component: CartComponent },
       { path: 'signin', component: SignInComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'account', component: AccountComponent, canActivate: [authGuard] }

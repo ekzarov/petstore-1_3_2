@@ -53,6 +53,7 @@ Notes for Angular 21 (Vite dev server):
 | `/catalog/categories/:categoryId` | Products in a category |
 | `/catalog/products/:productId` | Sellable items for a product (`?category=` preserves the back link) |
 | `/catalog/items/:itemId` | Item details |
+| `/cart` | Shopping cart (lines, quantity stepper, remove, empty; works signed out) |
 | `/signin` | Sign in (seeded users: `j2ee`/`j2ee`, `shopper`/`j2ee`, `admin`/`admin`) |
 | `/register` | Create an account (auto signs in on success) |
 | `/account` | View/edit contact details (requires sign-in; anonymous visitors are redirected) |
@@ -66,6 +67,16 @@ Sign-in calls `POST /api/auth/signin` and stores the JWT response under the
 redirects to `/signin` with a `returnUrl`. Sign-out simply discards the
 stored token. Passwords are never stored in the browser. Catalog browsing
 needs no sign-in.
+
+## Cart
+
+An anonymous cart id (GUID) is generated on first use and stored under the
+`localStorage` key `petstore.cartId`; an interceptor sends it as `X-Cart-Id`
+on `/api/cart` requests. All amounts and counts come from backend responses —
+the UI never computes totals. After sign-in the backend merges the anonymous
+cart into the user cart on the first cart call; the `CartService` reloads the
+cart whenever the identity changes, so the merge is visible immediately. The
+header cart indicator shows the backend item count on every route.
 
 ## Build
 
