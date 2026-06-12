@@ -22,9 +22,12 @@ public sealed class AccountSeederTests(PetstoreCatalogTestsFixture fixture) : Da
         {
             var users = await context.Users.AsNoTracking().OrderBy(user => user.UserId).ToListAsync();
 
-            Assert.Equal(["admin", "j2ee", "j2ee-ja", "shopper"], users.Select(user => user.UserId));
+            Assert.Equal(["admin", "j2ee", "j2ee-ja", "shopper", "supplier"], users.Select(user => user.UserId));
             Assert.Equal("admin", users.Single(user => user.UserId == "admin").Role);
-            Assert.All(users.Where(user => user.UserId != "admin"), user => Assert.Equal("customer", user.Role));
+            Assert.Equal("supplier", users.Single(user => user.UserId == "supplier").Role);
+            Assert.All(
+                users.Where(user => user.UserId is not "admin" and not "supplier"),
+                user => Assert.Equal("customer", user.Role));
 
             var j2ee = users.Single(user => user.UserId == "j2ee");
             Assert.True(hasher.Verify("j2ee", j2ee.PasswordHash, j2ee.PasswordSalt));

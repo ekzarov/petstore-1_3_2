@@ -49,7 +49,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true
         };
     });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    // Supplier operations: supplier role, with admin retained as superuser (013 DD-001).
+    options.AddPolicy("SupplierOperations", policy =>
+        policy.RequireRole(
+            Petstore.Data.AccountModelConstants.Roles.Supplier,
+            Petstore.Data.AccountModelConstants.Roles.Admin));
+});
 
 var app = builder.Build();
 

@@ -8,6 +8,15 @@
 
 **Input**: User description: "Separate the migrated admin and supplier responsibilities. Admin works with order approval and order monitoring. Supplier works with inventory and fulfillment. Add the supplier role and seeded supplier user, enforce backend access boundaries with tests, and stop treating inventory operations as ordinary admin operations unless explicitly decided."
 
+## Clarifications
+
+### Session 2026-06-12
+
+- Q: Admin access to inventory (DP-001)? -> A: Admin remains a superuser: inventory and fulfillment accept both `supplier` and `admin` roles. Order administration stays admin-only.
+- Q: Fulfillment trigger (DP-002)? -> A: Keep the feature-011 behavior: a successful inventory update automatically re-runs fulfillment for affected orders; the explicit run endpoint remains as an operational recovery action.
+- Q: Route placement (DP-003)? -> A: Move to `/api/supplier/inventory` and `/api/supplier/fulfillment/run`; the old `/api/admin/inventory` and `/api/admin/fulfillment/run` routes are removed without aliases (no external consumers).
+- Q: Supplier visibility of waiting orders (DP-004)? -> A: Blind mode: the supplier sees inventory and the processed-count result of fulfillment runs only; no order or customer data.
+
 ## Legacy Evidence *(Principle IV)*
 
 - Legacy admin app: `src/apps/admin` exposed a Java Web Start/Swing client launched from `/admin/AdminRequestProcessor`. Its business capabilities were pending-order approval/denial, non-pending order viewing, and sales/order charts.

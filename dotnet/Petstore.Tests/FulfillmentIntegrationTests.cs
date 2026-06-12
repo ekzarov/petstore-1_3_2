@@ -84,7 +84,7 @@ public sealed class FulfillmentIntegrationTests(PetstoreCatalogTestsFixture fixt
     {
         using var factory = new CatalogApiFactory(Fixture.ConnectionString);
         using var customer = await SignInClientAsync(factory, "j2ee", "j2ee");
-        using var admin = await SignInClientAsync(factory, "admin", "admin");
+        using var supplier = await SignInClientAsync(factory, "supplier", "supplier");
 
         // Only 3 of 10 ordered units in stock.
         await SetInventoryDirectAsync("EST-2", 3);
@@ -96,7 +96,7 @@ public sealed class FulfillmentIntegrationTests(PetstoreCatalogTestsFixture fixt
         Assert.Equal(0, await GetInventoryDirectAsync("EST-2"));
 
         // Replenish through the admin API: this must re-run fulfillment.
-        var replenish = await admin.PutAsJsonAsync("/api/admin/inventory/EST-2", new SetInventoryRequestDto(50));
+        var replenish = await supplier.PutAsJsonAsync("/api/supplier/inventory/EST-2", new SetInventoryRequestDto(50));
         Assert.Equal(HttpStatusCode.OK, replenish.StatusCode);
 
         var afterReplenish = await customer.GetFromJsonAsync<OrderDto>($"/api/orders/{order.OrderId}");
@@ -167,12 +167,12 @@ public sealed class FulfillmentIntegrationTests(PetstoreCatalogTestsFixture fixt
     {
         using var factory = new CatalogApiFactory(Fixture.ConnectionString);
         using var customer = await SignInClientAsync(factory, "j2ee", "j2ee");
-        using var admin = await SignInClientAsync(factory, "admin", "admin");
+        using var supplier = await SignInClientAsync(factory, "supplier", "supplier");
 
         var order = await PlaceOrderAsync(customer, "EST-1", 2); // COMPLETED
         var inventoryAfter = await GetInventoryDirectAsync("EST-1");
 
-        var run = await admin.PostAsync("/api/admin/fulfillment/run", null);
+        var run = await supplier.PostAsync("/api/supplier/fulfillment/run", null);
         Assert.Equal(HttpStatusCode.OK, run.StatusCode);
 
         Assert.Equal(inventoryAfter, await GetInventoryDirectAsync("EST-1"));
@@ -186,12 +186,13 @@ public sealed class FulfillmentIntegrationTests(PetstoreCatalogTestsFixture fixt
     {
         using var factory = new CatalogApiFactory(Fixture.ConnectionString);
         using var customer = await SignInClientAsync(factory, "j2ee", "j2ee");
+        using var supplier = await SignInClientAsync(factory, "supplier", "supplier");
         using var admin = await SignInClientAsync(factory, "admin", "admin");
 
         var order = await PlaceOrderAsync(customer, "EST-1", 31); // 511.50 -> PENDING
         await admin.PostAsync($"/api/admin/orders/{order.OrderId}/deny", null);
 
-        var run = await admin.PostAsync("/api/admin/fulfillment/run", null);
+        var run = await supplier.PostAsync("/api/supplier/fulfillment/run", null);
         Assert.Equal(HttpStatusCode.OK, run.StatusCode);
 
         await using var context = Fixture.CreateContext();

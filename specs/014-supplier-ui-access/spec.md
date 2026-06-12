@@ -13,6 +13,15 @@
 - Requires supplier backend role/access split from `specs/013-supplier-role-access`.
 - Builds on the existing Angular app and identity service from `specs/005-account-ui` and current admin area from `specs/012-admin-ui`.
 
+## Clarifications
+
+### Session 2026-06-12
+
+- Q: Supplier UI placement (DP-001)? -> A: Separate `/supplier` route area; inventory leaves `/admin`.
+- Q: Admin inventory visibility (DP-002)? -> A: Admin is a superuser: the shell shows the Supplier link to both roles, and the supplier area guard accepts `supplier` and `admin`.
+- Q: Fulfillment trigger in UI (DP-003)? -> A: Inventory save triggers fulfillment automatically (backend behavior); the UI shows the refreshed state, and "Run fulfillment" stays as a clearly labeled operational recovery action.
+- Q: Multi-role navigation (DP-004)? -> A: Deferred; no multi-role users exist. Admin sees both Admin and Supplier links per DP-002.
+
 ## Legacy Evidence *(Principle IV)*
 
 - Legacy admin UI was a Java Web Start/Swing client launched from `/admin`, focused on orders, approval/denial, and charts.
