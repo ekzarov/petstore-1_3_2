@@ -13,7 +13,45 @@ function Write-ReviewFile {
         New-Item -ItemType Directory -Path $directory -Force | Out-Null
     }
 
-    $Content | Out-File -FilePath $Path -Encoding utf8
+    for ($attempt = 1; $attempt -le 5; $attempt++) {
+        try {
+            $Content | Out-File -FilePath $Path -Encoding utf8
+            return
+        }
+        catch {
+            if ($attempt -eq 5) {
+                throw
+            }
+
+            Start-Sleep -Milliseconds (250 * $attempt)
+        }
+    }
+}
+
+function Get-OptionalFileSection {
+    param(
+        [string] $Title,
+        [string] $Path
+    )
+
+    if (-not (Test-Path $Path)) {
+        return @(
+            "## $Title",
+            "",
+            "_Missing: $Path_",
+            ""
+        ) -join "`n"
+    }
+
+    $content = Get-Content $Path -Raw
+    return @(
+        "## $Title",
+        "",
+        "~~~text",
+        $content,
+        "~~~",
+        ""
+    ) -join "`n"
 }
 
 try {
@@ -33,6 +71,7 @@ try {
     $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
     $repoRoot = Resolve-Path (Join-Path $scriptPath "..\..")
     Set-Location $repoRoot
+    $agentInstructionsPath = Join-Path $repoRoot ".claude\agents\sdd-compliance-reviewer.md"
 
     $flagPath = Join-Path $repoRoot ".claude\run-sdd-review"
     if (-not (Test-Path $flagPath)) {
@@ -91,6 +130,21 @@ try {
     $committedDiff = git diff --binary "$baseRef...HEAD"
     $stagedDiff = git diff --cached --binary
     $unstagedDiff = git diff --binary
+    $sddContext = @(
+        $(Get-OptionalFileSection "Constitution" ".specify/memory/constitution.md")
+        $(Get-OptionalFileSection "Feature Spec" (Join-Path $featureDir "spec.md"))
+        $(Get-OptionalFileSection "Feature Plan" (Join-Path $featureDir "plan.md"))
+        $(Get-OptionalFileSection "Feature Tasks" (Join-Path $featureDir "tasks.md"))
+        $(Get-OptionalFileSection "Feature Quickstart" (Join-Path $featureDir "quickstart.md"))
+        $(Get-OptionalFileSection "Feature Data Model" (Join-Path $featureDir "data-model.md"))
+    ) -join "`n"
+
+    $agentInstructions = if (Test-Path $agentInstructionsPath) {
+        Get-Content $agentInstructionsPath -Raw
+    }
+    else {
+        "You are an SDD compliance reviewer. Compare supplied SDD context and diff. Do not edit files."
+    }
 
     $reviewInput = @"
 # SDD Compliance Review Request
@@ -100,11 +154,21 @@ Branch: $branch
 HEAD: $head
 Base ref: $baseRef
 
+## Agent Instructions
+
+~~~text
+$agentInstructions
+~~~
+
 ## Reviewer Instructions
 
-Read the SDD artifacts in the feature directory and compare them with the code
-changes below. Report whether the implementation satisfies the SDD, what is
-missing, and what questions remain. Do not edit files.
+Use only the supplied SDD context and diff below. Do not read additional files,
+do not run commands, and do not edit files. Report whether the implementation
+satisfies the SDD, what is missing, and what questions remain.
+
+## Supplied SDD Context
+
+$sddContext
 
 ## Changed Files
 
@@ -112,21 +176,21 @@ $($changedFiles -join "`n")
 
 ## Committed Diff ($baseRef...HEAD)
 
-```diff
+~~~diff
 $committedDiff
-```
+~~~
 
 ## Staged Diff
 
-```diff
+~~~diff
 $stagedDiff
-```
+~~~
 
 ## Unstaged Diff
 
-```diff
+~~~diff
 $unstagedDiff
-```
+~~~
 
 ## Untracked Files
 
@@ -152,7 +216,7 @@ $($changedUntracked -join "`n")
             "Run manually from the repository root:",
             "",
             '```powershell',
-            'Get-Content .claude/reviews/sdd-review-input-last.md -Raw | claude --agent sdd-compliance-reviewer -p "Review this implementation against the supplied SDD artifacts."',
+            'Get-Content .claude/reviews/sdd-review-input-last.md -Raw | claude -p --permission-mode acceptEdits --settings .claude/reviews/child-settings.json "Review only the supplied SDD context and diff. Do not use tools. Return only the review report in Markdown."',
             '```'
         ) -join "`n"
         Write-ReviewFile -Path $reviewPath -Content $content
@@ -160,9 +224,9 @@ $($changedUntracked -join "`n")
         exit 0
     }
 
-    $prompt = "Review this implementation against the supplied SDD artifacts. Return only the review report in Markdown."
+    $prompt = "Review only the supplied SDD context and diff. Do not use tools. Return only the review report in Markdown."
     $output = Get-Content $inputPath -Raw |
-        & $claude.Source --agent sdd-compliance-reviewer -p --permission-mode acceptEdits --settings $childSettingsPath $prompt 2>&1
+        & $claude.Source -p --permission-mode acceptEdits --settings $childSettingsPath $prompt 2>&1
 
     if ($LASTEXITCODE -ne 0) {
         $content = @(
@@ -201,6 +265,7 @@ catch {
             '```'
         ) -join "`n"
         Write-ReviewFile -Path $fallbackPath -Content $content
+        Remove-Item ".claude\run-sdd-review" -Force -ErrorAction SilentlyContinue
     }
     catch {
         # Last-resort no-op: Stop hooks should not break the main Claude session.
