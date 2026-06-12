@@ -6,7 +6,7 @@
 
 ## Summary
 
-Implement the first migrated catalog slice as a read-only ASP.NET Core Web API in the existing `dotnet/Petstore` solution. The API exposes categories, products by category, items by product, and item by id using EF Core with seeded relational catalog data that preserves stable legacy PetStore identifiers for later cart and checkout migration.
+Implement the first migrated catalog slice as a read-only ASP.NET Core Web API in the existing `dotnet/Petstore` solution. The API exposes categories, products by category, items by product, and item by id using EF Core with seeded relational catalog data that preserves stable legacy PetStore identifiers for later cart and checkout migration. Seed data covers the full English legacy catalog from `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml`, not only the initial Fish representative path.
 
 ## Technical Context
 
@@ -28,7 +28,7 @@ Implement the first migrated catalog slice as a read-only ASP.NET Core Web API i
 
 **Constraints**: Read-only API; no authentication; no legacy H2 datasource; no JMS; no cart, checkout, OPC, Supplier, invoice, search, localization, admin inventory editing, or personalized catalog behavior.
 
-**Scale/Scope**: Small seed dataset matching the representative legacy catalog categories/products/items needed for browse parity and future cart integration.
+**Scale/Scope**: Full legacy catalog seed for browsing parity: 5 categories, 16 products, and 28 sellable items from the English legacy catalog baseline.
 
 ## Constitution Check
 
@@ -100,7 +100,7 @@ dotnet/Petstore.Tests/
 
 **EF Core Mapping Decision**: Keep `PetstoreCatalogContext` focused on DbSets and configuration registration. Entity mapping must live in separate `IEntityTypeConfiguration<T>` classes under `dotnet/Petstore/Data/Configurations/`. Table names, string length limits, precision values, and other repeated model constants must be centralized in `dotnet/Petstore/Data/CatalogModelConstants.cs`; mappings must reference constants rather than hardcoded literals.
 
-**EF Core Seed Data Decision**: Deterministic reference catalog data must be configured through `OnModelCreating` with separate public static seeder classes, for example `CatalogSeeder.Seed(modelBuilder)`. Do not seed reference data from hosted services or application startup side effects; seed data should be captured by migrations through `HasData`.
+**EF Core Seed Data Decision**: Deterministic reference catalog data must be configured through `OnModelCreating` with separate public static seeder classes, for example `CatalogSeeder.Seed(modelBuilder)`. Do not seed reference data from hosted services or application startup side effects; seed data should be captured by migrations through `HasData`. The seed must preserve the full English legacy catalog baseline of 5 categories, 16 products, and 28 items.
 
 **.NET Naming Decision**: New .NET classes, interfaces, fixtures, and test types must use PascalCase names without underscores, for example `PetstoreCatalogTestsFixture` rather than `PetstoreCatalog_TestsFixture`. Database names and connection string values should follow the same convention unless an external provider requires otherwise.
 

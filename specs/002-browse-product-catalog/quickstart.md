@@ -66,7 +66,24 @@ Invoke-RestMethod http://localhost:5000/api/catalog/categories/FISH/products
 Expected result includes:
 
 - `FI-SW-01` / `Angelfish`
+- `FI-SW-02` / `Tiger Shark`
+- `FI-FW-01` / `Koi`
 - `FI-FW-02` / `Goldfish`
+
+### List Dogs products
+
+```powershell
+Invoke-RestMethod http://localhost:5000/api/catalog/categories/DOGS/products
+```
+
+Expected result includes:
+
+- `K9-BD-01` / `Bulldog`
+- `K9-PO-02` / `Poodle`
+- `K9-DL-01` / `Dalmation`
+- `K9-RT-01` / `Golden Retriever`
+- `K9-RT-02` / `Labrador Retriever`
+- `K9-CW-01` / `Chihuahua`
 
 ### List Angelfish items
 
@@ -78,6 +95,17 @@ Expected result includes:
 
 - `EST-1` / `Large Angelfish` / `16.50` / `USD`
 - `EST-2` / `Small Angelfish` / `16.50` / `USD`
+
+### List Bulldog items
+
+```powershell
+Invoke-RestMethod http://localhost:5000/api/catalog/products/K9-BD-01/items
+```
+
+Expected result includes:
+
+- `EST-6` / `Male Adult Bulldog` / `18.50` / `USD`
+- `EST-7` / `Female Puppy Bulldog` / `18.50` / `USD`
 
 ### Get item by id
 
@@ -108,5 +136,5 @@ Tests should cover the OpenAPI contract paths, representative legacy parity ids,
 Unit tests should cover pure backend logic when it exists outside EF Core/API integration boundaries. Integration tests should cover:
 
 - catalog seeder idempotency
-- stable legacy ids and required relationships
+- stable legacy ids and required relationships for all 5 categories, 16 products, and 28 items
 - repository lookup behavior for known and unknown ids

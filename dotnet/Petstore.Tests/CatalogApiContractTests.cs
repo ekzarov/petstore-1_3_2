@@ -35,7 +35,7 @@ public sealed class CatalogApiContractTests(PetstoreCatalogTestsFixture fixture)
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(products);
-        Assert.Equal(["FI-SW-01", "FI-FW-02"], products.Select(product => product.Id));
+        Assert.Equal(["FI-SW-01", "FI-FW-02", "FI-FW-01", "FI-SW-02"], products.Select(product => product.Id));
         Assert.All(products, product => Assert.Equal("FISH", product.CategoryId));
 
         var angelfish = Assert.Single(products, product => product.Id == "FI-SW-01");
@@ -45,6 +45,14 @@ public sealed class CatalogApiContractTests(PetstoreCatalogTestsFixture fixture)
         var goldfish = Assert.Single(products, product => product.Id == "FI-FW-02");
         Assert.Equal("Goldfish", goldfish.Name);
         Assert.Equal("Fresh Water fish from China", goldfish.Description);
+
+        var koi = Assert.Single(products, product => product.Id == "FI-FW-01");
+        Assert.Equal("Koi", koi.Name);
+        Assert.Equal("Fresh Water fish from Japan", koi.Description);
+
+        var tigerShark = Assert.Single(products, product => product.Id == "FI-SW-02");
+        Assert.Equal("Tiger Shark", tigerShark.Name);
+        Assert.Equal("Salt Water fish from Australia", tigerShark.Description);
     }
 
     [Fact]
@@ -72,6 +80,36 @@ public sealed class CatalogApiContractTests(PetstoreCatalogTestsFixture fixture)
         Assert.Equal(["Small"], smallAngelfish.Attributes);
         Assert.Equal(16.50m, smallAngelfish.Price);
         Assert.Equal("USD", smallAngelfish.Currency);
+    }
+
+    [Fact]
+    public async Task Get_Catalog_Category_Products_And_Items_Returns_Non_Fish_Legacy_Data()
+    {
+        using var factory = new CatalogApiFactory(Fixture.ConnectionString);
+        using var client = factory.CreateClient();
+
+        var productsResponse = await client.GetAsync("/api/catalog/categories/DOGS/products");
+        var products = await productsResponse.Content.ReadFromJsonAsync<IReadOnlyList<ProductDto>>();
+
+        Assert.Equal(HttpStatusCode.OK, productsResponse.StatusCode);
+        Assert.NotNull(products);
+        Assert.Equal(
+            ["K9-BD-01", "K9-CW-01", "K9-DL-01", "K9-RT-01", "K9-RT-02", "K9-PO-02"],
+            products.Select(product => product.Id));
+
+        var itemsResponse = await client.GetAsync("/api/catalog/products/K9-BD-01/items");
+        var items = await itemsResponse.Content.ReadFromJsonAsync<IReadOnlyList<ItemDto>>();
+
+        Assert.Equal(HttpStatusCode.OK, itemsResponse.StatusCode);
+        Assert.NotNull(items);
+        Assert.Equal(["EST-7", "EST-6"], items.Select(item => item.Id));
+
+        var maleBulldog = Assert.Single(items, item => item.Id == "EST-6");
+        Assert.Equal("Male Adult Bulldog", maleBulldog.Name);
+        Assert.Equal(["Male Adult"], maleBulldog.Attributes);
+        Assert.Equal("Friendly dog from England", maleBulldog.Description);
+        Assert.Equal(18.50m, maleBulldog.Price);
+        Assert.Equal("USD", maleBulldog.Currency);
     }
 
     [Fact]

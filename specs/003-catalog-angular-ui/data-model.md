@@ -1,6 +1,6 @@
 # Data Model: Browse Catalog UI
 
-This feature does not create new persistent data. The frontend consumes the existing catalog API contract from `specs/002-browse-product-catalog/contracts/openapi.yaml`.
+This feature does not create new persistent data. The frontend consumes the existing catalog API contract from `specs/002-browse-product-catalog/contracts/openapi.yaml`. The backend seed mirrors the full English legacy catalog: 5 categories, 16 products, and 28 sellable items.
 
 ## CatalogCategory
 
@@ -37,7 +37,7 @@ This feature does not create new persistent data. The frontend consumes the exis
 **Validation/Display Rules**:
 
 - `id` and `categoryId` must be preserved in route links and service calls.
-- Empty product lists for known categories are shown as empty states, not errors.
+- Empty product lists for known categories are shown as empty states, not errors. The current migrated legacy seed has products for all five categories, so this state primarily protects future or test datasets.
 
 ## CatalogItem
 

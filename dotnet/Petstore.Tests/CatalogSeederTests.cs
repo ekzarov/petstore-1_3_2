@@ -24,15 +24,23 @@ public sealed class CatalogSeederTests(PetstoreCatalogTestsFixture fixture) : Da
         Assert.Contains("CATS", categoryIds);
         Assert.Contains("BIRDS", categoryIds);
 
-        Assert.Equal(2, productIds.Count);
+        Assert.Equal(16, productIds.Count);
         Assert.Equal(productIds.Count, productIds.Distinct().Count());
         Assert.Contains("FI-SW-01", productIds);
         Assert.Contains("FI-FW-02", productIds);
+        Assert.Contains("K9-BD-01", productIds);
+        Assert.Contains("RP-LI-02", productIds);
+        Assert.Contains("FL-DSH-01", productIds);
+        Assert.Contains("AV-CB-01", productIds);
 
-        Assert.Equal(2, itemIds.Count);
+        Assert.Equal(28, itemIds.Count);
         Assert.Equal(itemIds.Count, itemIds.Distinct().Count());
         Assert.Contains("EST-1", itemIds);
         Assert.Contains("EST-2", itemIds);
+        Assert.Contains("EST-6", itemIds);
+        Assert.Contains("EST-13", itemIds);
+        Assert.Contains("EST-14", itemIds);
+        Assert.Contains("EST-18", itemIds);
     }
 
     [Fact]
@@ -52,6 +60,19 @@ public sealed class CatalogSeederTests(PetstoreCatalogTestsFixture fixture) : Da
         Assert.Equal(["Large", "Cuddly"], largeAngelfish.Attributes);
         Assert.Equal(16.50m, largeAngelfish.Price);
         Assert.Equal("USD", largeAngelfish.Currency);
+
+        var bulldog = await context.Products.SingleAsync(product => product.Id == "K9-BD-01");
+        var maleBulldog = await context.Items.SingleAsync(item => item.Id == "EST-6");
+
+        Assert.Equal("DOGS", bulldog.CategoryId);
+        Assert.Equal("Bulldog", bulldog.Name);
+        Assert.Equal("Friendly dog from England", bulldog.Description);
+
+        Assert.Equal("K9-BD-01", maleBulldog.ProductId);
+        Assert.Equal("Male Adult Bulldog", maleBulldog.Name);
+        Assert.Equal(["Male Adult"], maleBulldog.Attributes);
+        Assert.Equal(18.50m, maleBulldog.Price);
+        Assert.Equal("USD", maleBulldog.Currency);
     }
 
     [Fact]
@@ -62,8 +83,8 @@ public sealed class CatalogSeederTests(PetstoreCatalogTestsFixture fixture) : Da
         await using var context = Fixture.CreateContext();
 
         Assert.Equal(5, await context.Categories.CountAsync());
-        Assert.Equal(2, await context.Products.CountAsync());
-        Assert.Equal(2, await context.Items.CountAsync());
+        Assert.Equal(16, await context.Products.CountAsync());
+        Assert.Equal(28, await context.Items.CountAsync());
     }
 
     [Fact]

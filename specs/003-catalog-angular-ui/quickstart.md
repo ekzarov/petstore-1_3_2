@@ -30,12 +30,14 @@ Expected outcome: Angular dev server starts and uses `proxy.conf.json` to forwar
 
 1. Open the Angular dev server URL.
 2. Verify Fish, Dogs, Reptiles, Cats, and Birds are visible without signing in.
-3. Select Fish and verify Angelfish and Goldfish appear.
-4. Open Angelfish and verify Large Angelfish and Small Angelfish appear with prices and currency.
-5. Open Large Angelfish details and verify `EST-1`, `FI-SW-01`, attributes, description, price, and currency.
-6. Refresh on a category route, product item route, and item detail route; verify the same state reloads.
-7. Navigate to unknown category, product, and item routes; verify not-found states and links back to normal browsing.
-8. Stop the backend while the frontend is running and verify the unavailable state appears for catalog API calls.
+3. Select Fish and verify Angelfish, Tiger Shark, Koi, and Goldfish appear.
+4. Select Dogs and verify Bulldog, Poodle, Dalmation, Golden Retriever, Labrador Retriever, and Chihuahua appear.
+5. Open Angelfish and verify Large Angelfish and Small Angelfish appear with prices and currency.
+6. Open Bulldog and verify Male Adult Bulldog and Female Puppy Bulldog appear with prices and currency.
+7. Open Large Angelfish details and verify `EST-1`, `FI-SW-01`, attributes, description, price, and currency.
+8. Refresh on a category route, product item route, and item detail route; verify the same state reloads.
+9. Navigate to unknown category, product, and item routes; verify not-found states and links back to normal browsing.
+10. Stop the backend while the frontend is running and verify the unavailable state appears for catalog API calls.
 
 ## Out of Scope for This Quickstart
 

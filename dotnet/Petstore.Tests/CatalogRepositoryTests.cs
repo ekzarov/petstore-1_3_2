@@ -18,7 +18,7 @@ public sealed class CatalogRepositoryTests(PetstoreCatalogTestsFixture fixture) 
     }
 
     [Fact]
-    public async Task GetProductsByCategoryAsync_Returns_Products_For_Known_Empty_Category()
+    public async Task GetProductsByCategoryAsync_Returns_Products_For_Known_Category()
     {
         await using var context = Fixture.CreateContext();
         var repository = new CatalogRepository(context);
@@ -26,7 +26,9 @@ public sealed class CatalogRepositoryTests(PetstoreCatalogTestsFixture fixture) 
         var products = await repository.GetProductsByCategoryAsync("DOGS");
 
         Assert.NotNull(products);
-        Assert.Empty(products);
+        Assert.Equal(
+            ["K9-BD-01", "K9-CW-01", "K9-DL-01", "K9-RT-01", "K9-RT-02", "K9-PO-02"],
+            products.Select(product => product.Id));
     }
 
     [Fact]
@@ -50,6 +52,18 @@ public sealed class CatalogRepositoryTests(PetstoreCatalogTestsFixture fixture) 
 
         Assert.NotNull(items);
         Assert.Equal(["EST-1", "EST-2"], items.Select(item => item.Id));
+    }
+
+    [Fact]
+    public async Task GetItemsByProductAsync_Returns_Seeded_Items_For_Non_Fish_Product()
+    {
+        await using var context = Fixture.CreateContext();
+        var repository = new CatalogRepository(context);
+
+        var items = await repository.GetItemsByProductAsync("K9-BD-01");
+
+        Assert.NotNull(items);
+        Assert.Equal(["EST-7", "EST-6"], items.Select(item => item.Id));
     }
 
     [Fact]
