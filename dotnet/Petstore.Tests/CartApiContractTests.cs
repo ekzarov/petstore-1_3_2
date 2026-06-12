@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Petstore.Models;
 
 namespace Petstore.Tests;
@@ -209,5 +210,31 @@ public sealed class CartApiContractTests(PetstoreCatalogTestsFixture fixture) : 
             Assert.NotNull(cart);
             Assert.Empty(cart.Lines);
         }
+    }
+
+    [Fact]
+    public async Task Item_Removed_From_Catalog_After_Add_Is_Flagged_As_Unavailable()
+    {
+        using var factory = new CatalogApiFactory(Fixture.ConnectionString);
+        var cartId = Guid.NewGuid().ToString();
+        using var client = CreateAnonymousClient(factory, cartId);
+
+        // Add item to cart
+        await client.PostAsJsonAsync("/api/cart/items", new AddCartItemRequestDto("EST-1"));
+
+        // Delete item from catalog
+        await using (var context = Fixture.CreateContext())
+        {
+            await context.Items.Where(item => item.Id == "EST-1").ExecuteDeleteAsync();
+        }
+
+        // Retrieve cart and verify it is flagged as unavailable
+        var cart = await client.GetFromJsonAsync<CartDto>("/api/cart");
+        Assert.NotNull(cart);
+        var line = Assert.Single(cart.Lines);
+        Assert.Equal("EST-1", line.ItemId);
+        Assert.True(line.Unavailable);
+        Assert.Equal(0, cart.ItemCount);
+        Assert.Equal(0m, cart.Total);
     }
 }
