@@ -17,6 +17,7 @@
 - Q: What minimum API scope should the first catalog browsing slice provide? -> A: Categories, products by category, items by product, and item by id.
 - Q: Should the first implementation continue using hardcoded static data? -> A: No, it must use deterministic migrated catalog data that can be verified independently.
 - Q: Which local data provider should the first implementation use? -> A: Provider selection belongs to the implementation plan, not this feature specification.
+- Q: How complete should the migrated catalog seed be? -> A: Seed the full legacy product catalog from `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml`, not only the initial Fish representative path.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -46,7 +47,8 @@ As a store visitor, I want to select a category and see its products so that I c
 **Acceptance Scenarios**:
 
 1. **Given** the Fish category exists, **When** the visitor opens Fish, **Then** the visitor sees Angelfish and Goldfish.
-2. **Given** a category has more products than the page displays at once, **When** the visitor uses pagination or equivalent navigation, **Then** the visitor can reach the remaining products without losing the selected category context.
+2. **Given** any seeded category exists, **When** the visitor opens that category, **Then** the visitor sees the products from the matching legacy category data.
+3. **Given** a category has more products than the page displays at once, **When** the visitor uses pagination or equivalent navigation, **Then** the visitor can reach the remaining products without losing the selected category context.
 
 ---
 
@@ -128,6 +130,7 @@ As a store visitor, I want clear feedback when a category, product, or item cann
 - **FR-019**: The first migrated catalog slice MUST read catalog data from a configured migrated data source rather than hardcoded in-memory lists.
 - **FR-020**: The first migrated catalog slice MUST load representative catalog data deterministically so the same baseline can be verified repeatedly.
 - **FR-021**: The first migrated catalog slice MUST NOT depend on legacy order-processing, supplier, messaging, or external catalog systems.
+- **FR-022**: The migrated catalog seed MUST include all English legacy categories, products, and items from `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml`, preserving stable ids, relationships, names, descriptions, attributes, list prices, and `USD` currency.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -147,6 +150,7 @@ As a store visitor, I want clear feedback when a category, product, or item cann
 - **SC-005**: At least one category-to-product-to-item parity path is documented and testable against the legacy baseline.
 - **SC-006**: Missing category, product, and item requests produce clear non-success outcomes without breaking normal catalog navigation.
 - **SC-007**: Stable identifiers for category, product, and item are available for future add-to-cart integration.
+- **SC-008**: Every seeded category has the same product coverage as the legacy catalog baseline, including Dogs, Reptiles, Cats, and Birds, not only Fish.
 
 ## Assumptions
 

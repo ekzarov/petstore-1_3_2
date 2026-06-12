@@ -18,7 +18,7 @@ Represents a top-level catalog group.
 
 - `id` is unique across categories.
 - `id` is stable and must not be derived from display name.
-- First seed set includes `FISH`, `DOGS`, `REPTILES`, `CATS`, and `BIRDS`.
+- Seed set includes `FISH`, `DOGS`, `REPTILES`, `CATS`, and `BIRDS` from the legacy catalog XML.
 
 ## Product
 
@@ -39,7 +39,8 @@ Represents a product family inside a category.
 
 - `id` is unique across products.
 - `categoryId` must refer to an existing category in the seed data.
-- Representative Fish products include `FI-SW-01` Angelfish and `FI-FW-02` Goldfish.
+- Seeded products must cover every English legacy product from `Populate-UTF8.xml`: 16 products across Fish, Dogs, Reptiles, Cats, and Birds.
+- Representative Fish products include `FI-SW-01` Angelfish, `FI-SW-02` Tiger Shark, `FI-FW-01` Koi, and `FI-FW-02` Goldfish.
 
 ## Item
 
@@ -64,7 +65,9 @@ Represents a sellable catalog variant.
 - `id` is unique across items.
 - `productId` must refer to an existing product in the seed data.
 - Price must be non-negative.
+- Seeded items must cover every English legacy item from `Populate-UTF8.xml`: `EST-1` through `EST-28`.
 - Representative Angelfish items include `EST-1` Large Angelfish and `EST-2` Small Angelfish.
+- Representative non-Fish items include `EST-6` Male Adult Bulldog, `EST-13` Green Adult Iguana, `EST-14` Tailless Manx, and `EST-18` Adult Male Amazon Parrot.
 
 ## ApiError
 
@@ -99,12 +102,14 @@ EF Core context for the migrated catalog slice.
 
 ## Catalog Seeder
 
-Deterministic seeder that inserts or updates representative legacy catalog data.
+Deterministic seeder that inserts or updates the full English legacy catalog data needed by browsing and future cart parity.
 
 **Seed rules**:
 
 - Must preserve stable legacy ids.
 - Must seed at least `FISH`, `DOGS`, `REPTILES`, `CATS`, `BIRDS`.
-- Must seed Fish products including `FI-SW-01` Angelfish and `FI-FW-02` Goldfish.
-- Must seed Angelfish items including `EST-1` Large Angelfish and `EST-2` Small Angelfish.
+- Must seed all 16 legacy products from Fish, Dogs, Reptiles, Cats, and Birds.
+- Must seed all 28 legacy sellable items, `EST-1` through `EST-28`.
+- Must seed Fish products including `FI-SW-01` Angelfish, `FI-SW-02` Tiger Shark, `FI-FW-01` Koi, and `FI-FW-02` Goldfish.
+- Must seed Angelfish items including `EST-1` Large Angelfish and `EST-2` Small Angelfish, plus sellable items for Dogs, Reptiles, Cats, and Birds.
 - Must be safe to run repeatedly without duplicating rows.

@@ -8,7 +8,7 @@
 
 ## Summary
 
-Create a separate Angular catalog browsing UI under `frontend/petstore-ui` that consumes the existing migrated ASP.NET catalog API from `specs/002-browse-product-catalog`. The first slice is read-only and supports categories, products, product items, item details, loading/empty/error/not-found states, and browser navigation. During local development, the Angular dev server will use a proxy for `/api/*` requests so the frontend and backend can remain separate processes without adding development-only CORS policy to the backend.
+Create a separate Angular catalog browsing UI under `frontend/petstore-ui` that consumes the existing migrated ASP.NET catalog API from `specs/002-browse-product-catalog`. The first slice is read-only and supports categories, products, product items, item details, loading/empty/error/not-found states, and browser navigation across the full English legacy catalog seed. During local development, the Angular dev server will use a proxy for `/api/*` requests so the frontend and backend can remain separate processes without adding development-only CORS policy to the backend.
 
 ## Technical Context
 
@@ -28,7 +28,7 @@ Create a separate Angular catalog browsing UI under `frontend/petstore-ui` that 
 
 **Constraints**: Read-only catalog UI; no cart, checkout, login, admin editing, search, localization, or production deployment integration in this feature.
 
-**Scale/Scope**: One Angular app under `frontend/petstore-ui`, four catalog browsing user stories, and shared local dev proxy configuration.
+**Scale/Scope**: One Angular app under `frontend/petstore-ui`, four catalog browsing user stories, full seeded catalog browsing across 5 categories, and shared local dev proxy configuration.
 
 ## Constitution Check
 

@@ -31,7 +31,7 @@
 
 ## Decision: Preserve legacy ids in API responses
 
-**Rationale**: Future cart and checkout work will need stable category, product, and item identifiers. The legacy seed file provides canonical ids such as `FISH`, `FI-SW-01`, `FI-FW-02`, `EST-1`, and `EST-2`.
+**Rationale**: Future cart and checkout work will need stable category, product, and item identifiers. The legacy seed file provides canonical ids such as `FISH`, `FI-SW-01`, `FI-FW-02`, `K9-BD-01`, `EST-1`, `EST-2`, and `EST-28`.
 
 **Alternatives considered**:
 
@@ -68,7 +68,7 @@
 
 ## Decision: Seed catalog data through application seeders
 
-**Rationale**: Seeders keep the first migrated catalog deterministic while using EF Core storage. They can preserve known legacy ids such as `FISH`, `FI-SW-01`, and `EST-1`, and can later be replaced by migrations/import tooling if the migration strategy changes.
+**Rationale**: Seeders keep the first migrated catalog deterministic while using EF Core storage. They preserve the full English legacy browse catalog from `Populate-UTF8.xml`: 5 categories, 16 products, and 28 sellable items. This avoids a misleading partial catalog where non-Fish categories exist but have no migrated products or items.
 
 **Alternatives considered**:
 

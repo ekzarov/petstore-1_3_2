@@ -15,6 +15,16 @@ Accept: application/json
 
 ###
 
+GET {{Petstore_HostAddress}}/api/catalog/categories/DOGS/products
+Accept: application/json
+
+###
+
+GET {{Petstore_HostAddress}}/api/catalog/products/K9-BD-01/items
+Accept: application/json
+
+###
+
 GET {{Petstore_HostAddress}}/api/catalog/items/EST-1
 Accept: application/json
 

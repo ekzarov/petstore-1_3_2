@@ -162,6 +162,7 @@
 - [x] T044 Run `dotnet build dotnet/Petstore/Petstore.slnx`
 - [x] T045 Run `dotnet test dotnet/Petstore/Petstore.slnx`
 - [x] T046 Validate quickstart scenarios from `specs/002-browse-product-catalog/quickstart.md`
+- [x] T047 Expand `dotnet/Petstore/Catalog/CatalogSeeder.cs` and EF migration data to include the full English legacy catalog from `src/apps/petstore/src/docroot/populate/Populate-UTF8.xml`, covering 5 categories, 16 products, and 28 items, and update backend tests/SDD accordingly
 
 ---
 
@@ -240,5 +241,5 @@ After Phase 2, one developer can work on categories/products while another works
 
 - Keep this slice read-only at the API level; database writes are limited to schema creation/migration and deterministic seeders.
 - Do not introduce legacy H2 connectivity, JMS, cart, checkout, OPC, Supplier, invoice, search, localization, or admin catalog editing work in this feature.
-- Preserve legacy ids exactly because future cart migration will depend on item ids.
+- Preserve legacy ids exactly because future cart migration will depend on item ids. The seed data must include all English legacy catalog products and items, not only the initial Fish parity path.
 - Commit implementation in small logical groups at story checkpoints.

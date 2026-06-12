@@ -16,6 +16,7 @@
 - Q: Should the first UI copy the legacy Java PetStore visual design? -> A: No, build a simple modern catalog browsing UI first and improve styling later.
 - Q: Should the first UI implementation include automated UI tests? -> A: No, validate manually for the first pass.
 - Q: How should the frontend reach the backend during local development? -> A: Use the Angular development proxy for `/api/*` so the browser talks to the frontend origin while the dev server forwards API calls to the ASP.NET backend.
+- Q: What catalog data should the UI expect from the backend? -> A: The backend seed mirrors the full English legacy catalog, so all five categories can expose products and items rather than only Fish.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -45,7 +46,8 @@ As a store visitor, I want to view products in a selected category so that I can
 **Acceptance Scenarios**:
 
 1. **Given** the visitor selected Fish, **When** the product list loads, **Then** Angelfish and Goldfish are visible.
-2. **Given** a known category has no products, **When** the visitor opens that category, **Then** the UI shows an empty state without treating it as an error.
+2. **Given** the visitor selected Dogs, Reptiles, Cats, or Birds, **When** the product list loads, **Then** products from that legacy category are visible.
+3. **Given** a known category has no products in a future or test dataset, **When** the visitor opens that category, **Then** the UI shows an empty state without treating it as an error.
 
 ---
 
@@ -107,6 +109,7 @@ As a store visitor, I want clear feedback when a category, product, or item cann
 - **FR-012**: The first UI slice MUST remain read-only and MUST NOT include cart, checkout, account, search, localization, recommendations, or admin catalog editing.
 - **FR-013**: The UI MUST consume the existing migrated catalog API behavior rather than hardcoded catalog data.
 - **FR-014**: The UI MUST support manual validation of all primary browsing paths during the first pass.
+- **FR-015**: The UI MUST support browsing products and items in every seeded legacy category, including Dogs, Reptiles, Cats, and Birds, not only Fish.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -121,6 +124,7 @@ As a store visitor, I want clear feedback when a category, product, or item cann
 
 - **SC-001**: A visitor can open the UI and see all five seeded category names without signing in.
 - **SC-002**: A visitor can select Fish and see Angelfish and Goldfish in one browsing flow.
+- **SC-002a**: A visitor can select a non-Fish category such as Dogs and see its legacy products in the same browsing flow.
 - **SC-003**: A visitor can open Angelfish and see Large Angelfish and Small Angelfish with prices and currency.
 - **SC-004**: A visitor can open Large Angelfish details and verify `EST-1`, `FI-SW-01`, attributes, description, price, and currency.
 - **SC-005**: Unknown category, product, and item states show clear not-found feedback instead of unrelated catalog data.
