@@ -34,3 +34,19 @@ GET {{Petstore_HostAddress}}/api/catalog/categories/UNKNOWN/products
 Accept: application/json
 
 ###
+
+# Sign in as admin first and paste the token below.
+POST {{Petstore_HostAddress}}/api/auth/signin
+Content-Type: application/json
+
+{ "userId": "admin", "password": "admin" }
+
+###
+
+# Admin sales analytics (legacy pie/bar chart data): revenue share and
+# sales counts per category for an inclusive date range.
+GET {{Petstore_HostAddress}}/api/admin/analytics/sales?startDate=2026-01-01&endDate=2026-12-31
+Accept: application/json
+Authorization: Bearer {{admin_token}}
+
+###

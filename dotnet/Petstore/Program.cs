@@ -26,6 +26,8 @@ builder.Services.AddScoped<Petstore.Orders.OrderPlacementService>();
 builder.Services.AddScoped<Petstore.OrderProcessing.OrderTransitionRepository>();
 builder.Services.AddScoped<Petstore.OrderProcessing.IOrderProcessingService, Petstore.OrderProcessing.OrderProcessingService>();
 builder.Services.AddScoped<Petstore.Supplier.IInventoryRepository, Petstore.Supplier.InventoryRepository>();
+builder.Services.AddScoped<Petstore.Analytics.IAdminSalesAnalyticsRepository, Petstore.Analytics.AdminSalesAnalyticsRepository>();
+builder.Services.AddScoped<Petstore.Analytics.IAdminSalesAnalyticsService, Petstore.Analytics.AdminSalesAnalyticsService>();
 builder.Services.AddScoped<Petstore.Supplier.IFulfillmentService, Petstore.Supplier.FulfillmentService>();
 builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
 builder.Services.AddSingleton<JwtTokenService>();
