@@ -26,6 +26,8 @@ invoice/completion.
 | 010 | [Order processing & approval](010-order-processing/spec.md) | Backend | Done | 008 |
 | 011 | [Supplier fulfillment](011-supplier-fulfillment/spec.md) | Backend | Done | 010 |
 | 012 | [Admin orders & inventory UI](012-admin-ui/spec.md) | UI | Done | 010, 011 |
+| 013 | [Supplier role & backend access split](013-supplier-role-access/spec.md) | Backend | Draft | 004, 010, 011, 012 |
+| 014 | [Supplier UI & admin navigation split](014-supplier-ui-access/spec.md) | UI | Draft | 005, 012, 013 |
 
 ## Per-Feature Workflow
 
@@ -45,6 +47,9 @@ Each feature follows the Spec Kit flow before code:
 - **Payment card data handling** (004 DP-002, 008 DP-003) — legacy stored fake
   plaintext card data; not preserved.
 - **Mail notifications** (010 DP-003) — legacy mailer behavior, may be deferred.
+- **Supplier/operator separation** (013/014) — legacy used separate admin and
+  supplier application boundaries; the migrated stack must represent that split
+  with explicit roles and route/API policies.
 
 ## Intentionally Out Of Scope (entire roadmap)
 
