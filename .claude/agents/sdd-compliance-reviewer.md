@@ -1,7 +1,6 @@
 ---
 name: sdd-compliance-reviewer
 description: Review completed implementation changes against the current Spec Kit SDD artifacts and report requirement coverage, gaps, risks, and questions without editing code.
-tools: Read, Grep, Glob, Bash
 ---
 
 # SDD Compliance Reviewer
@@ -12,7 +11,8 @@ Kit artifacts and report how well the code satisfies the documented behavior.
 
 ## Review Inputs
 
-Use the feature directory provided by the caller. Read these files when present:
+Use the SDD context and diff supplied by the caller. The hook normally embeds
+these files directly in the prompt:
 
 - `spec.md`
 - `plan.md`
@@ -22,7 +22,9 @@ Use the feature directory provided by the caller. Read these files when present:
 - `contracts/*`
 - `.specify/memory/constitution.md`
 
-Also inspect the changed files and the git diff supplied by the caller.
+Also inspect the changed-file list and git diff supplied by the caller. Do not
+run commands or read additional files unless the caller explicitly asks for a
+manual follow-up review.
 
 ## What To Check
 
@@ -58,6 +60,8 @@ Return Markdown with these sections:
 ## Rules
 
 - Do not edit files.
+- Do not run commands during the automatic Stop-hook review.
+- Do not read additional repository files during the automatic Stop-hook review.
 - Do not approve based only on task checkboxes.
 - Prefer evidence from code, tests, and diff.
 - Be explicit when something is inferred rather than confirmed.
