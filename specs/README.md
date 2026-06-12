@@ -28,6 +28,8 @@ invoice/completion.
 | 012 | [Admin orders & inventory UI](012-admin-ui/spec.md) | UI | Done | 010, 011 |
 | 013 | [Supplier role & backend access split](013-supplier-role-access/spec.md) | Backend | Done | 004, 010, 011, 012 |
 | 014 | [Supplier UI & admin navigation split](014-supplier-ui-access/spec.md) | UI | Done | 005, 012, 013 |
+| 015 | [Admin sales analytics API](015-admin-sales-analytics/spec.md) | Backend API | Draft | 008, 010, 013 |
+| 016 | [Admin sales charts UI](016-admin-sales-charts-ui/spec.md) | UI | Draft | 012, 014, 015 |
 
 ## Per-Feature Workflow
 
@@ -50,6 +52,9 @@ Each feature follows the Spec Kit flow before code:
 - **Supplier/operator separation** (013/014) — legacy used separate admin and
   supplier application boundaries; the migrated stack must represent that split
   with explicit roles and route/API policies.
+- **Admin sales charts** (015/016) — legacy Swing admin showed revenue share
+  and sales count by category; migration must preserve the metric meaning while
+  allowing a modern UI implementation.
 
 ## Intentionally Out Of Scope (entire roadmap)
 
