@@ -14,21 +14,21 @@
 
 - [X] T004 [US1] Move the inventory component to `frontend/petstore-ui/src/app/supplier/inventory.component.ts`, retarget it to `SupplierApiService`, and relabel "Run fulfillment" as an operational recovery action
 - [X] T005 [US1] Wire the guarded `/supplier` route area in `frontend/petstore-ui/src/app/app.routes.ts`; remove the `/admin/inventory` route
-- [ ] T006 [US1] Manually validate: supplier signs in, sees inventory, edits stock; direct `/admin` URLs redirect without rendering order data
+- [X] T006 [US1] Manually validate: supplier signs in, sees inventory, edits stock; direct `/admin` URLs redirect without rendering order data
 
 ## Phase 3: User Story 2 - Admin Keeps Order Management Workspace (P1)
 
 - [X] T007 [US2] Remove the Inventory tab from `frontend/petstore-ui/src/app/admin/admin-shell.component.ts`; add the Supplier link (visible to supplier and admin) and keep the Admin link admin-only in `frontend/petstore-ui/src/app/catalog/catalog-shell.component.ts`
-- [ ] T008 [US2] Manually validate: admin keeps Pending queue / All orders and can open `/supplier` as superuser
+- [X] T008 [US2] Manually validate: admin keeps Pending queue / All orders and can open `/supplier` as superuser
 
 ## Phase 4: User Story 3 - Customer And Anonymous Cannot Reach Privileged Workspaces (P1)
 
-- [ ] T009 [US3] Manually validate the remaining role matrix: customer and anonymous see no privileged links, direct URLs to `/admin/*` and `/supplier` redirect safely, refresh on privileged routes behaves
+- [X] T009 [US3] Manually validate the remaining role matrix: customer and anonymous see no privileged links, direct URLs to `/admin/*` and `/supplier` redirect safely, refresh on privileged routes behaves
 
 ## Phase 5: Polish
 
 - [X] T010 [P] Update `frontend/petstore-ui/README.md` (route table: `/supplier`; admin section without inventory)
-- [ ] T011 Run `npx ng build` and the full manual quickstart including the supplier replenishment flow unblocking a waiting order
+- [X] T011 Run `npx ng build` and the full manual quickstart including the supplier replenishment flow unblocking a waiting order
 
 ## Dependencies
 
