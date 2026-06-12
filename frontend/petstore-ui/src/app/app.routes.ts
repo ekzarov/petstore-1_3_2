@@ -17,7 +17,8 @@ import { AdminShellComponent } from './admin/admin-shell.component';
 import { PendingOrdersComponent } from './admin/pending-orders.component';
 import { AdminOrderListComponent } from './admin/admin-order-list.component';
 import { AdminOrderDetailComponent } from './admin/admin-order-detail.component';
-import { InventoryComponent } from './admin/inventory.component';
+import { supplierGuard } from './supplier/supplier.guard';
+import { InventoryComponent } from './supplier/inventory.component';
 
 export const routes: Routes = [
   {
@@ -49,10 +50,10 @@ export const routes: Routes = [
           { path: '', redirectTo: 'pending', pathMatch: 'full' },
           { path: 'pending', component: PendingOrdersComponent },
           { path: 'orders', component: AdminOrderListComponent },
-          { path: 'orders/:orderId', component: AdminOrderDetailComponent },
-          { path: 'inventory', component: InventoryComponent }
+          { path: 'orders/:orderId', component: AdminOrderDetailComponent }
         ]
-      }
+      },
+      { path: 'supplier', component: InventoryComponent, canActivate: [supplierGuard] }
     ]
   }
 ];

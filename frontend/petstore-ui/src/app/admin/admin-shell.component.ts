@@ -12,7 +12,6 @@ import { ORDER_STATUSES } from './admin.models';
       <nav class="admin-nav">
         <a routerLink="/admin/pending" routerLinkActive="admin-nav__link--active" class="admin-nav__link">Pending queue</a>
         <a routerLink="/admin/orders" routerLinkActive="admin-nav__link--active" class="admin-nav__link">All orders</a>
-        <a routerLink="/admin/inventory" routerLinkActive="admin-nav__link--active" class="admin-nav__link">Inventory</a>
       </nav>
 
       @if (counts(); as c) {

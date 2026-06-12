@@ -27,7 +27,7 @@ invoice/completion.
 | 011 | [Supplier fulfillment](011-supplier-fulfillment/spec.md) | Backend | Done | 010 |
 | 012 | [Admin orders & inventory UI](012-admin-ui/spec.md) | UI | Done | 010, 011 |
 | 013 | [Supplier role & backend access split](013-supplier-role-access/spec.md) | Backend | Done | 004, 010, 011, 012 |
-| 014 | [Supplier UI & admin navigation split](014-supplier-ui-access/spec.md) | UI | Planned | 005, 012, 013 |
+| 014 | [Supplier UI & admin navigation split](014-supplier-ui-access/spec.md) | UI | Done | 005, 012, 013 |
 
 ## Per-Feature Workflow
 

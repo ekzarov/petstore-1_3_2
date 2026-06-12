@@ -20,6 +20,9 @@ import { CartService } from '../cart/cart.service';
         @if (identity.isAdmin()) {
           <a routerLink="/admin" class="catalog-header__signin">Admin</a>
         }
+        @if (identity.isSupplier() || identity.isAdmin()) {
+          <a routerLink="/supplier" class="catalog-header__signin">Supplier</a>
+        }
         @if (identity.isSignedIn()) {
           <a routerLink="/orders" class="catalog-header__signin">Orders</a>
           <a routerLink="/account" class="catalog-header__user">{{ identity.userId() }}</a>

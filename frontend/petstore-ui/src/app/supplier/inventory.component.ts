@@ -1,23 +1,19 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AdminApiService } from './admin-api.service';
-import { InventoryItem } from './admin.models';
+import { SupplierApiService } from './supplier-api.service';
+import { InventoryItem } from '../admin/admin.models';
 import { LoadingStateComponent } from '../shared/loading-state.component';
 import { UnavailableStateComponent } from '../shared/unavailable-state.component';
 
 @Component({
-  selector: 'app-admin-inventory',
+  selector: 'app-supplier-inventory',
   standalone: true,
   imports: [FormsModule, LoadingStateComponent, UnavailableStateComponent],
   template: `
     <h1 class="cart-title">Supplier inventory</h1>
-
-    <div class="admin-bulk">
-      <button type="button" (click)="runFulfillment()" [disabled]="busy()">Run fulfillment</button>
-      @if (runResult() !== null) {
-        <span class="identity-form__hint">Processed {{ runResult() }} eligible orders.</span>
-      }
-    </div>
+    <p class="identity-form__hint">
+      Saving a quantity automatically ships waiting approved orders for that item.
+    </p>
 
     @if (error()) {
       <p class="cart-error">{{ error() }}</p>
@@ -55,11 +51,21 @@ import { UnavailableStateComponent } from '../shared/unavailable-state.component
           }
         </tbody>
       </table>
+
+      <div class="admin-bulk supplier-recovery">
+        <button type="button" (click)="runFulfillment()" [disabled]="busy()">Re-run fulfillment (recovery)</button>
+        @if (runResult() !== null) {
+          <span class="identity-form__hint">Processed {{ runResult() }} eligible orders.</span>
+        }
+        <span class="identity-form__hint">
+          Normally not needed: saving a quantity already triggers shipping.
+        </span>
+      </div>
     }
   `
 })
 export class InventoryComponent implements OnInit {
-  private readonly api = inject(AdminApiService);
+  private readonly api = inject(SupplierApiService);
 
   readonly state = signal<'loading' | 'ready' | 'unavailable'>('loading');
   readonly items = signal<InventoryItem[]>([]);
@@ -92,6 +98,7 @@ export class InventoryComponent implements OnInit {
     this.api.setInventory(itemId, Number(quantity)).subscribe({
       next: () => {
         this.busy.set(false);
+        // Reload: auto-fulfillment may have decremented the saved value already.
         this.load();
       },
       error: () => {

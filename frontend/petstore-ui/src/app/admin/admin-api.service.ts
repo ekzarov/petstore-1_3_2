@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AdminOrderDetail, AdminOrderSummary, InventoryItem, OrderTransition } from './admin.models';
+import { AdminOrderDetail, AdminOrderSummary, OrderTransition } from './admin.models';
 
 @Injectable({ providedIn: 'root' })
 export class AdminApiService {
@@ -26,17 +26,5 @@ export class AdminApiService {
 
   getTransitions(orderId: string): Observable<OrderTransition[]> {
     return this.http.get<OrderTransition[]>(`/api/admin/orders/${orderId}/transitions`);
-  }
-
-  getInventory(): Observable<InventoryItem[]> {
-    return this.http.get<InventoryItem[]>('/api/admin/inventory');
-  }
-
-  setInventory(itemId: string, quantity: number): Observable<InventoryItem> {
-    return this.http.put<InventoryItem>(`/api/admin/inventory/${itemId}`, { quantity });
-  }
-
-  runFulfillment(): Observable<{ processed: number }> {
-    return this.http.post<{ processed: number }>('/api/admin/fulfillment/run', null);
   }
 }
