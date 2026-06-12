@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Petstore.Data;
 using Petstore.Models;
 using Petstore.Supplier;
 
 namespace Petstore.Controllers;
 
 [ApiController]
-[Route("api/admin")]
-[Authorize(Roles = AccountModelConstants.Roles.Admin)]
-public sealed class AdminInventoryController(
+[Route("api/supplier")]
+[Authorize(Policy = "SupplierOperations")]
+public sealed class SupplierInventoryController(
     IInventoryRepository inventoryRepository,
     IFulfillmentService fulfillmentService) : ControllerBase
 {
@@ -39,7 +38,8 @@ public sealed class AdminInventoryController(
 
         await inventoryRepository.SetQuantityAsync(itemId, request.Quantity, cancellationToken);
 
-        // Replenishment may unblock partially shipped orders (011 DD-001).
+        // Replenishment automatically re-runs fulfillment for affected orders
+        // (013 DD-003, matching the legacy supplier submit flow).
         await fulfillmentService.FulfillOrdersForItemAsync(itemId, cancellationToken);
 
         var onHand = await inventoryRepository.GetOnHandAsync(itemId, cancellationToken);
@@ -51,6 +51,7 @@ public sealed class AdminInventoryController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> RunFulfillmentAsync(CancellationToken cancellationToken)
     {
+        // Operational recovery action; blind mode returns only the count (013 DD-004).
         var processed = await fulfillmentService.FulfillAllEligibleAsync(cancellationToken);
 
         return Ok(new { processed });

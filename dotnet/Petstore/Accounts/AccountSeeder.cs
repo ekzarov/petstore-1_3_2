@@ -11,7 +11,8 @@ public static class AccountSeeder
         ("j2ee", "j2ee", AccountModelConstants.Roles.Customer),
         ("j2ee-ja", "j2ee", AccountModelConstants.Roles.Customer),
         ("shopper", "j2ee", AccountModelConstants.Roles.Customer),
-        ("admin", "admin", AccountModelConstants.Roles.Admin)
+        ("admin", "admin", AccountModelConstants.Roles.Admin),
+        ("supplier", "supplier", AccountModelConstants.Roles.Supplier)
     ];
 
     public static async Task SeedAsync(PetstoreCatalogContext context, IPasswordHasher passwordHasher, CancellationToken cancellationToken = default)
