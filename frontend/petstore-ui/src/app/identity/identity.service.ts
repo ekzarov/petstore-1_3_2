@@ -15,6 +15,7 @@ export class IdentityService {
   readonly role = computed(() => this.identity()?.role ?? null);
   readonly isSignedIn = computed(() => this.identity() !== null);
   readonly isAdmin = computed(() => this.identity()?.role === 'admin');
+  readonly isSupplier = computed(() => this.identity()?.role === 'supplier');
 
   get token(): string | null {
     return this.identity()?.token ?? null;

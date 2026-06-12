@@ -57,7 +57,8 @@ Notes for Angular 21 (Vite dev server):
 | `/checkout` | Order review + shipping/billing details + placement (requires sign-in) |
 | `/orders` | Order history with status badges (requires sign-in) |
 | `/orders/:orderId` | Order details: lines, totals, shipping, status (requires sign-in) |
-| `/admin` | Admin area (requires the `admin` role; seeded `admin`/`admin`): pending queue with approve/deny (single + bulk), all orders by status with transition history, supplier inventory editing, manual fulfillment run |
+| `/admin` | Admin area (requires the `admin` role; seeded `admin`/`admin`): pending queue with approve/deny (single + bulk), all orders by status with transition history. Suppliers, customers, and anonymous visitors are redirected away; the backend role policy is the enforcement of record |
+| `/supplier` | Supplier inventory workspace (roles `supplier` or `admin`; seeded `supplier`/`supplier`): on-hand quantities with inline editing — saving automatically ships waiting approved orders — plus a recovery re-run action |
 | `/signin` | Sign in (seeded users: `j2ee`/`j2ee`, `shopper`/`j2ee`, `admin`/`admin`) |
 | `/register` | Create an account (auto signs in on success) |
 | `/account` | View/edit contact details (requires sign-in; anonymous visitors are redirected) |
