@@ -2,7 +2,7 @@
 
 html {
   min-height: 100%;
-  background: #fffaf2;
+  background: #0d2c2f;
 }
 
 body {
@@ -10,16 +10,18 @@ body {
   min-height: 100dvh;
   font-family: system-ui, sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(20, 169, 184, 0.14), transparent 28rem),
-    radial-gradient(circle at 88% 12%, rgba(239, 118, 95, 0.14), transparent 24rem),
-    linear-gradient(135deg, #fffaf2 0%, #f2fbfb 48%, #fff7ec 100%);
+    radial-gradient(circle at top left, rgba(168, 132, 58, 0.28), transparent 34rem),
+    radial-gradient(circle at 88% 8%, rgba(48, 196, 182, 0.14), transparent 26rem),
+    radial-gradient(circle at 12% 100%, rgba(186, 134, 60, 0.22), transparent 34rem),
+    radial-gradient(circle at 95% 90%, rgba(160, 120, 52, 0.16), transparent 30rem),
+    linear-gradient(150deg, #1d2a1f 0%, #15383a 45%, #233028 100%);
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
-  color: #1a1a1a;
+  color: #e7f1f0;
 }
 
-a { color: #197d83; text-decoration: none; }
+a { color: #7fd6db; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 button,
@@ -846,4 +848,62 @@ a.cart-checkout-btn:hover { text-decoration: none; opacity: 0.9; }
   }
 
   .item-detail__fields dd { margin-bottom: 0.6rem; }
+}
+
+/* ── Dark gradient background adjustments ──
+   Text that sits directly on the body gradient becomes light; white cards
+   and forms keep their own dark text so contrast stays intact. */
+
+.category-hero h1 { color: #f2f9f8; }
+.category-hero p { color: #b9cfcd; }
+.category-hero__eyebrow { color: #7fd6db; }
+
+.cart-title { color: #f2f9f8; }
+
+.state-loading,
+.state-empty,
+.state-not-found {
+  color: #b9cfcd;
+}
+
+.state-unavailable { color: #ff9aa6; }
+.cart-error { color: #ff9aa6; }
+
+.cart-summary__total { color: #e7f1f0; }
+
+.order-detail__contact h2 { color: #dcebea; }
+.order-detail__contact p { color: #b9cfcd; }
+
+.admin-transitions__meta { color: #9fb6b4; }
+
+.identity-form__hint { color: #9fb6b4; }
+
+/* Inside white surfaces the inherited light text must flip back to dark. */
+.cart-table,
+.identity-form,
+.item-detail,
+.checkout-confirmation,
+.admin-counts,
+.admin-filter__tab,
+.product-card,
+.item-card {
+  color: #1a1a1a;
+}
+
+.cart-table .cart-summary__total,
+.identity-form .identity-form__hint,
+.checkout-confirmation .identity-form__hint {
+  color: #555;
+}
+
+.identity-form label { color: #444; }
+
+.admin-nav__link { background: rgba(255, 255, 255, 0.92); }
+
+.admin-filter__tab { border-color: rgba(255, 255, 255, 0.5); }
+
+.cart-stepper button { background: #fff; }
+
+.cart-empty-btn {
+  background: rgba(255, 255, 255, 0.92);
 }
