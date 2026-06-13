@@ -211,4 +211,140 @@ public sealed class AdminSalesAnalyticsApiContractTests(PetstoreCatalogTestsFixt
         Assert.Equal(HttpStatusCode.Forbidden, customerResponse.StatusCode);
         Assert.Equal(HttpStatusCode.Unauthorized, anonymousResponse.StatusCode);
     }
+
+    [Fact]
+    public async Task Aggregates_Multiple_Lines_In_Same_Category_And_Filters_Unsold_Categories()
+    {
+        using var factory = new CatalogApiFactory(Fixture.ConnectionString);
+        using var customer = await SignInClientAsync(factory, "j2ee", "j2ee");
+        using var admin = await SignInClientAsync(factory, "admin", "admin");
+
+        // Fetch 2 items of category FISH and 1 item of category BIRDS
+        var fishItems = await GetItemsOfCategoryAsync(customer, "FISH", 2);
+        var birdItems = await GetItemsOfCategoryAsync(customer, "BIRDS", 1);
+
+        Assert.Equal(2, fishItems.Count);
+        Assert.Single(birdItems);
+
+        var fish1 = fishItems[0];
+        var fish2 = fishItems[1];
+        var bird = birdItems[0];
+
+        // Place one order with multiple line items from FISH and BIRDS
+        await customer.PostAsJsonAsync("/api/cart/items", new AddCartItemRequestDto(fish1.ItemId));
+        await customer.PutAsJsonAsync($"/api/cart/items/{fish1.ItemId}", new SetCartQuantityRequestDto(2));
+
+        await customer.PostAsJsonAsync("/api/cart/items", new AddCartItemRequestDto(fish2.ItemId));
+        await customer.PutAsJsonAsync($"/api/cart/items/{fish2.ItemId}", new SetCartQuantityRequestDto(3));
+
+        await customer.PostAsJsonAsync("/api/cart/items", new AddCartItemRequestDto(bird.ItemId));
+        await customer.PutAsJsonAsync($"/api/cart/items/{bird.ItemId}", new SetCartQuantityRequestDto(1));
+
+        var orderResponse = await customer.PostAsJsonAsync("/api/orders", new PlaceOrderRequestDto(Shipping, null));
+        Assert.Equal(HttpStatusCode.Created, orderResponse.StatusCode);
+
+        // Fetch analytics
+        var analytics = await admin.GetFromJsonAsync<AdminSalesAnalyticsDto>($"/api/admin/analytics/sales?{Range}");
+
+        Assert.NotNull(analytics);
+        
+        // Assert that only FISH and BIRDS are returned (DOGS, CATS, REPTILES are unsold and must be excluded)
+        Assert.Equal(2, analytics.Categories.Count);
+        
+        var fishCategory = analytics.Categories.Single(c => c.CategoryId == "FISH");
+        var birdCategory = analytics.Categories.Single(c => c.CategoryId == "BIRDS");
+
+        // Assert grouping and summing for multiple lines in the same category (FISH)
+        var expectedFishRevenue = (fish1.Price * 2) + (fish2.Price * 3);
+        Assert.Equal(expectedFishRevenue, fishCategory.Revenue);
+        Assert.Equal(5, fishCategory.SalesCount);
+
+        // Assert single line BIRDS
+        var expectedBirdRevenue = bird.Price * 1;
+        Assert.Equal(expectedBirdRevenue, birdCategory.Revenue);
+        Assert.Equal(1, birdCategory.SalesCount);
+
+        // Total
+        Assert.Equal(expectedFishRevenue + expectedBirdRevenue, analytics.TotalRevenue);
+        Assert.Equal(6, analytics.TotalSalesCount);
+        Assert.Equal(100m, fishCategory.RevenuePercent + birdCategory.RevenuePercent);
+    }
+
+    [Fact]
+    public async Task Unknown_Or_Deleted_Category_Fallback_To_Unknown_Group()
+    {
+        using var factory = new CatalogApiFactory(Fixture.ConnectionString);
+        using var admin = await SignInClientAsync(factory, "admin", "admin");
+
+        // Directly insert an order with an unknown/deleted item ID
+        await using (var context = Fixture.CreateContext())
+        {
+            var unknownItemOrder = new Petstore.Data.Entities.OrderEntity
+            {
+                UserId = "j2ee",
+                PlacedAt = new DateTime(2026, 6, 15, 12, 0, 0, DateTimeKind.Utc),
+                Status = Petstore.Orders.OrderStatus.Completed,
+                Currency = "USD",
+                Total = 100.00m,
+                ShippingContact = new Petstore.Data.Entities.OrderContactBlock
+                {
+                    FamilyName = "Doe", GivenName = "Jane", Street1 = "1 Main Street", City = "Springfield",
+                    State = "IL", Zip = "62701", Country = "USA", Email = "jane@example.com", Phone = "555-0100"
+                },
+                BillingContact = new Petstore.Data.Entities.OrderContactBlock
+                {
+                    FamilyName = "Doe", GivenName = "Jane", Street1 = "1 Main Street", City = "Springfield",
+                    State = "IL", Zip = "62701", Country = "USA", Email = "jane@example.com", Phone = "555-0100"
+                },
+                Lines =
+                [
+                    new Petstore.Data.Entities.OrderLineEntity
+                    {
+                        ItemId = "EST-FAKE-UNKNOWN-ITEM",
+                        Name = "Fake Unknown Item",
+                        UnitPrice = 50.00m,
+                        Currency = "USD",
+                        Quantity = 2,
+                        QuantityShipped = 2
+                    }
+                ]
+            };
+
+            context.Orders.Add(unknownItemOrder);
+            await context.SaveChangesAsync();
+        }
+
+        // Retrieve analytics
+        var analytics = await admin.GetFromJsonAsync<AdminSalesAnalyticsDto>($"/api/admin/analytics/sales?{Range}");
+        
+        Assert.NotNull(analytics);
+        
+        // Assert category groups under UNKNOWN
+        var unknownCategory = analytics.Categories.Single(c => c.CategoryId == "UNKNOWN");
+        Assert.Equal("UNKNOWN", unknownCategory.CategoryName);
+        Assert.Equal(100.00m, unknownCategory.Revenue);
+        Assert.Equal(2, unknownCategory.SalesCount);
+    }
+
+    private static async Task<List<(string ItemId, decimal Price)>> GetItemsOfCategoryAsync(HttpClient client, string categoryId, int count)
+    {
+        var itemsList = new List<(string ItemId, decimal Price)>();
+        var products = await client.GetFromJsonAsync<IReadOnlyList<ProductDto>>($"/api/catalog/categories/{categoryId}/products");
+        foreach (var product in products!)
+        {
+            var items = await client.GetFromJsonAsync<IReadOnlyList<ItemDto>>($"/api/catalog/products/{product.Id}/items");
+            if (items != null)
+            {
+                foreach (var item in items)
+                {
+                    itemsList.Add((item.Id, item.Price));
+                    if (itemsList.Count == count)
+                    {
+                        return itemsList;
+                    }
+                }
+            }
+        }
+        return itemsList;
+    }
 }
