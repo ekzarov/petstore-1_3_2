@@ -745,6 +745,238 @@ a.cart-checkout-btn:hover { text-decoration: none; opacity: 0.9; }
   border-radius: 6px;
 }
 
+.sales-dashboard {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.sales-dashboard__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sales-dashboard__eyebrow {
+  margin: 0 0 0.25rem;
+  color: #7fd6db;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.sales-dashboard__filters {
+  display: flex;
+  align-items: end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
+}
+
+.sales-dashboard__filters label {
+  display: grid;
+  gap: 0.25rem;
+  color: #394c51;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.sales-dashboard__filters input {
+  min-width: 10rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #b9c7c9;
+  border-radius: 6px;
+}
+
+.sales-dashboard__filters button {
+  min-height: 2.35rem;
+  padding: 0.45rem 1rem;
+  border: 0;
+  border-radius: 6px;
+  background: #197d83;
+  color: #fff;
+  cursor: pointer;
+}
+
+.sales-dashboard__filters button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.sales-dashboard__empty {
+  min-height: 14rem;
+}
+
+.sales-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.sales-summary > div,
+.sales-panel {
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #122226;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+}
+
+.sales-summary > div {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem;
+}
+
+.sales-summary__label {
+  color: #66787c;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.sales-summary strong {
+  font-size: 1.12rem;
+}
+
+.sales-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.sales-panel {
+  min-width: 0;
+  padding: 1rem;
+}
+
+.sales-panel__head {
+  margin-bottom: 1rem;
+}
+
+.sales-panel__head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.sales-panel__head p {
+  margin: 0.2rem 0 0;
+  color: #66787c;
+  font-size: 0.9rem;
+}
+
+.sales-donut-wrap {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.75fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.sales-donut {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 1;
+  justify-self: center;
+  overflow: visible;
+}
+
+.sales-donut__track,
+.sales-donut__segment {
+  fill: none;
+  stroke-width: 22;
+}
+
+.sales-donut__track {
+  stroke: #e6eeee;
+}
+
+.sales-donut__segment {
+  transform: rotate(-90deg);
+  transform-origin: 90px 90px;
+  stroke-linecap: butt;
+}
+
+.sales-donut__value {
+  fill: #102327;
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
+.sales-donut__label {
+  fill: #66787c;
+  font-size: 0.72rem;
+}
+
+.sales-legend {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.sales-legend__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.sales-legend__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sales-swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 999px;
+}
+
+.sales-bars {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sales-bar-row {
+  display: grid;
+  grid-template-columns: minmax(5rem, 0.32fr) minmax(0, 1fr) 3.2rem;
+  gap: 0.65rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.sales-bar-row__label {
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
+.sales-bar-row__track {
+  height: 1.1rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e6eeee;
+}
+
+.sales-bar-row__bar {
+  display: block;
+  min-width: 0.35rem;
+  height: 100%;
+  border-radius: inherit;
+}
+
+@media (max-width: 900px) {
+  .sales-summary,
+  .sales-charts,
+  .sales-donut-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Identity forms ── */
 .identity-form {
   background: #fff;

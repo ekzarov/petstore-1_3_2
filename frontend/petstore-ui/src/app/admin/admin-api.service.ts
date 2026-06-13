@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AdminOrderDetail, AdminOrderSummary, OrderTransition } from './admin.models';
+import { AdminOrderDetail, AdminOrderSummary, AdminSalesAnalytics, OrderTransition } from './admin.models';
 
 @Injectable({ providedIn: 'root' })
 export class AdminApiService {
@@ -26,5 +26,11 @@ export class AdminApiService {
 
   getTransitions(orderId: string): Observable<OrderTransition[]> {
     return this.http.get<OrderTransition[]>(`/api/admin/orders/${orderId}/transitions`);
+  }
+
+  getSalesAnalytics(startDate: string, endDate: string): Observable<AdminSalesAnalytics> {
+    return this.http.get<AdminSalesAnalytics>(
+      `/api/admin/analytics/sales?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`
+    );
   }
 }

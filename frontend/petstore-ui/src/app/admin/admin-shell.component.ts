@@ -12,6 +12,7 @@ import { ORDER_STATUSES } from './admin.models';
       <nav class="admin-nav">
         <a routerLink="/admin/pending" routerLinkActive="admin-nav__link--active" class="admin-nav__link">Pending queue</a>
         <a routerLink="/admin/orders" routerLinkActive="admin-nav__link--active" class="admin-nav__link">All orders</a>
+        <a routerLink="/admin/sales" routerLinkActive="admin-nav__link--active" class="admin-nav__link">Sales</a>
       </nav>
 
       @if (counts(); as c) {
@@ -33,7 +34,7 @@ export class AdminShellComponent implements OnInit {
   private readonly api = inject(AdminApiService);
 
   readonly statuses = ORDER_STATUSES;
-  readonly counts = signal<Record<string, number> | null>(null);
+  readonly counts = signal<Partial<Record<string, number>> | null>(null);
 
   ngOnInit(): void {
     this.refreshCounts();
