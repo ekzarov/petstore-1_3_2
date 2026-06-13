@@ -34,6 +34,22 @@ export interface InventoryItem {
   quantityOnHand: number;
 }
 
+export interface AdminCategorySalesMetric {
+  categoryId: string;
+  categoryName: string;
+  revenue: number;
+  revenuePercent: number;
+  salesCount: number;
+}
+
+export interface AdminSalesAnalytics {
+  startDate: string;
+  endDate: string;
+  totalRevenue: number;
+  totalSalesCount: number;
+  categories: AdminCategorySalesMetric[];
+}
+
 export const ORDER_STATUSES = [
   'PENDING',
   'APPROVED',

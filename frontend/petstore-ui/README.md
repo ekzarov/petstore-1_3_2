@@ -58,6 +58,7 @@ Notes for Angular 21 (Vite dev server):
 | `/orders` | Order history with status badges (requires sign-in) |
 | `/orders/:orderId` | Order details: lines, totals, shipping, status (requires sign-in) |
 | `/admin` | Admin area (requires the `admin` role; seeded `admin`/`admin`): pending queue with approve/deny (single + bulk), all orders by status with transition history. Suppliers, customers, and anonymous visitors are redirected away; the backend role policy is the enforcement of record |
+| `/admin/sales` | Admin sales dashboard: revenue share by category and sold quantity by category for a selected date range |
 | `/supplier` | Supplier inventory workspace (roles `supplier` or `admin`; seeded `supplier`/`supplier`): on-hand quantities with inline editing — saving automatically ships waiting approved orders — plus a recovery re-run action |
 | `/signin` | Sign in (seeded users: `j2ee`/`j2ee`, `shopper`/`j2ee`, `admin`/`admin`) |
 | `/register` | Create an account (auto signs in on success) |
@@ -93,6 +94,14 @@ sent. The place-order button disables while submitting; the backend's
 empty-cart guard is the authoritative double-submit protection. All totals
 come from API responses. Order statuses are displayed verbatim
 (`PENDING`, `APPROVED`, …) as colored badges.
+
+## Admin sales dashboard
+
+The admin sales dashboard consumes `GET /api/admin/analytics/sales` and renders
+two legacy-equivalent chart views: revenue share by category and sold quantity
+by category. Business aggregation stays in the backend; the UI only renders the
+returned category rows, totals, loading, empty, validation, and unavailable
+states.
 
 ## Build
 
