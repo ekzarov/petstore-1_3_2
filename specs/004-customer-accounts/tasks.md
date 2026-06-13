@@ -15,7 +15,7 @@
 - [X] T004 [P] Create entity configurations in `dotnet/Petstore/Data/Configurations/UserEntityConfiguration.cs` and `CustomerContactEntityConfiguration.cs`; add DbSets to `dotnet/Petstore/Data/PetstoreCatalogContext.cs`
 - [X] T005 Create `dotnet/Petstore/Accounts/IPasswordHasher.cs` and `Pbkdf2PasswordHasher.cs` (PBKDF2-SHA256, 100k iterations, 16-byte random salt)
 - [X] T006 [P] Add unit tests in `dotnet/Petstore.Tests/Pbkdf2PasswordHasherTests.cs` (verify round-trip, distinct salts, wrong password fails)
-- [X] T007 Create `dotnet/Petstore/Accounts/AccountSeeder.cs` seeding `j2ee`, `j2ee-ja`, `shopper` (password `j2ee`, role customer) and `admin` (password `admin`, role admin), idempotent
+- [X] T007 Add migration seed data for `j2ee`, `j2ee-ja`, `shopper` (password `j2ee`, role customer) and `admin` (password `admin`, role admin), idempotent and not run from application startup
 - [X] T008 Add EF Core migration for users and contacts tables under `dotnet/Petstore/Data/Migrations/` and verify `dotnet ef database update`
 - [X] T009 Create `dotnet/Petstore/Accounts/IAccountRepository.cs` and `AccountRepository.cs` (create account, find user, get/update contact)
 
@@ -42,7 +42,7 @@
 ## Phase 6: Polish
 
 - [X] T021 [P] Add catalog-stays-anonymous regression test in `dotnet/Petstore.Tests/AuthApiContractTests.cs`
-- [X] T022 [P] Add database integration test (`DatabaseIntegration` trait) for seeder idempotency and parity users in `dotnet/Petstore.Tests/AccountSeederTests.cs`
+- [X] T022 [P] Add database integration test (`DatabaseIntegration` trait) proving migration seed data creates parity users after `Database.MigrateAsync` in `dotnet/Petstore.Tests/MigrationSeedDataTests.cs`
 - [X] T023 Run full test suite and manual smoke: register → sign in → read account → update contact via HTTP file or curl
 
 ## Dependencies

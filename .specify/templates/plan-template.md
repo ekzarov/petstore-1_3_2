@@ -46,6 +46,12 @@ For backend runtime features, this check must explicitly state how automated uni
 integration, or contract tests satisfy the constitution's Automated Backend
 Verification principle, or record the approved deferral and follow-up task.
 
+For features that add schema, reference data, demo data, or operational seed data,
+this check must explicitly state that the application startup remains free of
+automatic migrations, runtime seeders, hosted seed services, or equivalent database
+mutation side effects. Data changes must be represented by explicit migrations or
+documented manual commands.
+
 ## Project Structure
 
 ### Documentation (this feature)

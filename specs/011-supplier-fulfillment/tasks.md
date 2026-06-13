@@ -8,7 +8,7 @@
 
 - [X] T001 [P] Create `dotnet/Petstore/Data/Entities/SupplierInventoryEntity.cs`, `ShipmentEntity.cs`, `ShipmentLineEntity.cs` with configurations; add `QuantityShipped` to `OrderLineEntity`; add DbSets
 - [X] T002 Add EF Core migration for inventory/shipments/quantity-shipped under `dotnet/Petstore/Data/Migrations/` and verify `dotnet ef database update`
-- [X] T003 Create `dotnet/Petstore/Supplier/InventorySeeder.cs` (100 units per catalog item, idempotent)
+- [X] T003 Add migration seed data for supplier inventory (100 units per catalog item, idempotent) without runtime application startup seeding
 - [X] T004 Create `dotnet/Petstore/Supplier/IInventoryRepository.cs` and `InventoryRepository.cs` (read, set non-negative, concurrency-safe decrement)
 
 ## Phase 2: User Story 1 - Fulfill With Sufficient Stock (P1)

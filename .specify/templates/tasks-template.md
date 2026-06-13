@@ -10,6 +10,9 @@ description: "Task list template for feature implementation"
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
 **Tests**: The examples below include test tasks. Tests are OPTIONAL unless the feature specification, implementation plan, or project constitution requires them. Backend runtime changes require automated test tasks unless a justified deferral is documented.
+Database reference/demo data changes require migration tasks and database integration
+tests proving the data exists after explicit migration; do not generate startup
+seeding tasks or hosted seed services.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 

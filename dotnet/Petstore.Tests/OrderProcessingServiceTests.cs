@@ -39,6 +39,14 @@ public sealed class OrderProcessingServiceTests(PetstoreCatalogTestsFixture fixt
         return order.Id;
     }
 
+    private async Task SetOrderItemStockAsync(int quantity)
+    {
+        await using var context = Fixture.CreateContext();
+        var inventory = await context.SupplierInventory.SingleAsync(row => row.ItemId == "EST-1");
+        inventory.QuantityOnHand = quantity;
+        await context.SaveChangesAsync();
+    }
+
     private static OrderContactBlock Contact()
     {
         return new OrderContactBlock
@@ -59,6 +67,7 @@ public sealed class OrderProcessingServiceTests(PetstoreCatalogTestsFixture fixt
     public async Task Order_Below_Threshold_Is_Auto_Approved_As_System()
     {
         var orderId = await CreateOrderAsync(499.99m);
+        await SetOrderItemStockAsync(0);
 
         await using var context = Fixture.CreateContext();
         var service = new OrderProcessingService(context, new OrderTransitionRepository(context), ConfigWithThreshold(500m), new Petstore.Supplier.FulfillmentService(context, new Petstore.Supplier.InventoryRepository(context), new OrderTransitionRepository(context)));
@@ -91,6 +100,7 @@ public sealed class OrderProcessingServiceTests(PetstoreCatalogTestsFixture fixt
     public async Task Re_Evaluation_Of_Decided_Order_Is_A_NoOp()
     {
         var orderId = await CreateOrderAsync(100m);
+        await SetOrderItemStockAsync(0);
 
         await using var context = Fixture.CreateContext();
         var service = new OrderProcessingService(context, new OrderTransitionRepository(context), ConfigWithThreshold(500m), new Petstore.Supplier.FulfillmentService(context, new Petstore.Supplier.InventoryRepository(context), new OrderTransitionRepository(context)));

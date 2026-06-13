@@ -28,7 +28,7 @@ All principles pass. Consolidating the supplier into the single backend (vs the 
 
 - **DD-001 (DP-001)**: Fulfillment triggers synchronously: (a) after an order transitions to `APPROVED` (called from 010's decision/auto-approval paths), and (b) after an inventory adjustment, for all `APPROVED`/`SHIPPED_PART` orders touching that item. `IFulfillmentService.FulfillOrder(orderId)` isolates the trigger for a later queued implementation, mirroring 010 DD-001.
 - **DD-002 (DP-002)**: Supplier is a module (`dotnet/Petstore/Supplier/`) in the same backend and database. Rationale: one deployable keeps the slice small; the module boundary preserves the option to split later.
-- **DD-003 (DP-003)**: Inventory seeded at 100 units per existing catalog item via idempotent seeder; value chosen to keep manual partial-shipment testing easy (set stock low via the admin endpoint).
+- **DD-003 (DP-003)**: Inventory seeded at 100 units per existing catalog item via explicit EF Core migration data; value chosen to keep manual partial-shipment testing easy (set stock low via the admin endpoint). Application startup must not create or update inventory rows implicitly.
 - **DD-004**: Shipment algorithm per order: for each unshipped line quantity, ship `min(remaining, onHand)` inside one transaction with row-level guard `WHERE QuantityOnHand >= @take` style decrements (stock never negative, concurrency safe); write a `Shipment` row with shipped lines; then apply status via 010's transition rules: all lines fully shipped → `SHIPPED` then `COMPLETED` (invoice handling rule: completion applied immediately after the final shipment's invoice record in this slice); some shipped → `SHIPPED_PART`; none → no transition.
 - **DD-005**: Idempotency: shipped quantities tracked per order line (`QuantityShipped` column on order lines); re-running fulfillment ships only the remainder; fully shipped orders are no-ops. Missing inventory rows read as zero stock.
 - **DD-006**: API surface (admin role):
@@ -42,8 +42,7 @@ All principles pass. Consolidating the supplier into the single backend (vs the 
 dotnet/Petstore/
 |-- Supplier/
 |   |-- IFulfillmentService.cs / FulfillmentService.cs
-|   |-- IInventoryRepository.cs / InventoryRepository.cs
-|   `-- InventorySeeder.cs
+|   `-- IInventoryRepository.cs / InventoryRepository.cs
 |-- Controllers/AdminInventoryController.cs
 |-- Data/Entities/SupplierInventoryEntity.cs, ShipmentEntity.cs, ShipmentLineEntity.cs (+ configurations)
 |-- Models/InventoryItemDto.cs, SetInventoryRequestDto.cs
