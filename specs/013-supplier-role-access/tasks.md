@@ -7,12 +7,12 @@
 ## Phase 1: Foundational (role + seeding)
 
 - [X] T001 Add `Roles.Supplier` to `dotnet/Petstore/Data/AccountModelConstants.cs`
-- [X] T002 Seed `supplier`/`supplier` (role `supplier`) idempotently in `dotnet/Petstore/Accounts/AccountSeeder.cs`
+- [X] T002 Seed `supplier`/`supplier` (role `supplier`) idempotently through explicit EF Core migration data
 - [X] T003 Register the `SupplierOperations` policy (roles `supplier`, `admin`) in `dotnet/Petstore/Program.cs`
 
 ## Phase 2: User Story 1 - Seed And Authenticate Supplier Identity (P1)
 
-- [X] T004 [US1] Add contract tests: supplier sign-in returns role `supplier` (not admin), admin sign-in unchanged, seeder idempotency with pre-existing users, in `dotnet/Petstore.Tests/SupplierRoleApiContractTests.cs` and `dotnet/Petstore.Tests/AccountSeederTests.cs`
+- [X] T004 [US1] Add contract tests: supplier sign-in returns role `supplier` (not admin), admin sign-in unchanged, migration seed data is present after `Database.MigrateAsync`, in `dotnet/Petstore.Tests/SupplierRoleApiContractTests.cs` and `dotnet/Petstore.Tests/MigrationSeedDataTests.cs`
 - [X] T005 [US1] Verify with `dotnet test dotnet/Petstore/Petstore.slnx`
 
 ## Phase 3: User Story 2 - Restrict Order Administration To Admins (P1)

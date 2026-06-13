@@ -7,7 +7,7 @@
 Add user accounts to the existing ASP.NET backend: a users table with per-user
 salt + PBKDF2 password hash and a role column, JWT bearer authentication,
 registration, sign-in, and authenticated read/update of contact details.
-Catalog endpoints stay anonymous. Seed legacy parity users.
+Catalog endpoints stay anonymous. Seed legacy parity users through explicit EF Core migration data.
 
 ## Technical Context
 
@@ -37,7 +37,7 @@ Catalog endpoints stay anonymous. Seed legacy parity users.
 - **DD-003 (DP-002)**: No credit card data stored anywhere in this slice.
 - **DD-004 (DP-003)**: Profile preferences deferred.
 - **DD-005**: Contact info lives in a `CustomerContacts` table keyed by `UserId` (family name, given name, street1, street2 nullable, city, state, zip, country, email, phone).
-- **DD-006**: Seed users `j2ee`, `j2ee-ja`, `shopper` (password `j2ee`, role `customer`) and `admin` (password `admin`, role `admin`) via idempotent startup/migration seeding with precomputed salt+hash values.
+- **DD-006**: Seed users `j2ee`, `j2ee-ja`, `shopper` (password `j2ee`, role `customer`) and `admin` (password `admin`, role `admin`) via explicit EF Core migration data with precomputed salt+hash values. Application startup must not create or update these rows.
 - **DD-007**: API surface:
   - `POST /api/account` — register (user id, password, contact info) → 201 or 409 conflict.
   - `POST /api/auth/signin` — credentials → token or 401 (identical for unknown user / wrong password).
@@ -52,8 +52,7 @@ Catalog endpoints stay anonymous. Seed legacy parity users.
 dotnet/Petstore/
 |-- Accounts/
 |   |-- IPasswordHasher.cs / Pbkdf2PasswordHasher.cs
-|   |-- IAccountRepository.cs / AccountRepository.cs
-|   `-- AccountSeeder.cs
+|   `-- IAccountRepository.cs / AccountRepository.cs
 |-- Controllers/
 |   |-- AccountController.cs
 |   `-- AuthController.cs
@@ -66,11 +65,12 @@ dotnet/Petstore.Tests/
 |-- Pbkdf2PasswordHasherTests.cs          (unit)
 |-- AccountValidationTests.cs             (unit)
 |-- AccountApiContractTests.cs            (contract/integration)
-`-- AuthApiContractTests.cs               (contract/integration)
+|-- AuthApiContractTests.cs               (contract/integration)
+`-- MigrationSeedDataTests.cs             (database integration)
 ```
 
 ## Test Strategy (Constitution VI)
 
 - Unit: PBKDF2 hasher (round-trip verify, distinct salts, wrong password fails), request validation rules.
 - Contract/integration: register happy path, duplicate 409, validation 400 with field names; sign-in success, wrong password vs unknown user indistinguishable 401; authenticated GET/PUT account; 401 for anonymous; catalog endpoints anonymous regression check; no password/hash in any response.
-- Database integration (`DatabaseIntegration` trait): seeding idempotency, parity users present.
+- Database integration (`DatabaseIntegration` trait): migration seed data creates parity users after `Database.MigrateAsync`; application startup does not seed implicitly.

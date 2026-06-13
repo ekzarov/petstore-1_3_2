@@ -75,17 +75,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<PetstoreCatalogContext>();
-    var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
-    if (await context.Database.CanConnectAsync())
-    {
-        await AccountSeeder.SeedAsync(context, passwordHasher);
-        await Petstore.Supplier.InventorySeeder.SeedAsync(context);
-    }
-}
-
 app.Run();
 
 public partial class Program
