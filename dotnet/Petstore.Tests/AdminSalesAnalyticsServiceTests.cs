@@ -81,6 +81,40 @@ public sealed class AdminSalesAnalyticsServiceTests
         Assert.Equal(new DateTime(2026, 7, 1, 0, 0, 0, DateTimeKind.Utc), repository.ToExclusive);
     }
 
+    [Fact]
+    public async Task Single_Day_Date_Range_Maps_To_Half_Open_Timestamps()
+    {
+        var repository = new FakeRepository([]);
+        var service = new AdminSalesAnalyticsService(repository);
+
+        await service.GetSalesAnalyticsAsync(new DateOnly(2026, 6, 15), new DateOnly(2026, 6, 15), CancellationToken.None);
+
+        Assert.Equal(new DateTime(2026, 6, 15, 0, 0, 0, DateTimeKind.Utc), repository.FromInclusive);
+        Assert.Equal(new DateTime(2026, 6, 16, 0, 0, 0, DateTimeKind.Utc), repository.ToExclusive);
+    }
+
+    [Fact]
+    public async Task Service_Sorts_Categories_By_Revenue_Descending_And_CategoryId_Ascending()
+    {
+        var result = await RunAsync(
+            new AdminCategorySalesRow("CATS", "Cats", 50.00m, 2),
+            new AdminCategorySalesRow("FISH", "Fish", 120.00m, 4),
+            new AdminCategorySalesRow("DOGS", "Dogs", 50.00m, 3),
+            new AdminCategorySalesRow("BIRDS", "Birds", 73.00m, 2));
+
+        Assert.Equal(4, result.Categories.Count);
+        
+        // 1st: FISH (120.00m) - highest revenue
+        Assert.Equal("FISH", result.Categories[0].CategoryId);
+        
+        // 2nd: BIRDS (73.00m) - second highest revenue
+        Assert.Equal("BIRDS", result.Categories[1].CategoryId);
+        
+        // 3rd & 4th have equal revenue (50.00m), so sorted alphabetically by CategoryId: CATS then DOGS
+        Assert.Equal("CATS", result.Categories[2].CategoryId);
+        Assert.Equal("DOGS", result.Categories[3].CategoryId);
+    }
+
     [Theory]
     [InlineData(0, 100, 0)]
     [InlineData(100, 0, 0)]      // zero total guard
@@ -94,6 +128,9 @@ public sealed class AdminSalesAnalyticsServiceTests
     [Theory]
     [InlineData(null, "2026-06-30", "required")]
     [InlineData("2026-06-01", null, "required")]
+    [InlineData(null, null, "required")]
+    [InlineData("", "", "required")]
+    [InlineData("   ", "   ", "required")]
     [InlineData("garbage", "2026-06-30", "startDate")]
     [InlineData("2026-06-01", "30/06/2026", "endDate")]
     [InlineData("2026-07-01", "2026-06-30", "after")]
