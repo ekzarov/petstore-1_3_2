@@ -151,4 +151,34 @@ public sealed class AdminSalesAnalyticsServiceTests
         Assert.Equal(new DateOnly(2026, 6, 1), start);
         Assert.Equal(new DateOnly(2026, 6, 30), end);
     }
+
+    [Fact]
+    public async Task Category_With_Zero_Revenue_But_Positive_Sales_Count_Gets_Zero_Percent()
+    {
+        var result = await RunAsync(
+            new AdminCategorySalesRow("CATS", "Cats", 100m, 5),
+            new AdminCategorySalesRow("FREE", "Free Gift", 0m, 2));
+
+        Assert.Equal(100m, result.TotalRevenue);
+        Assert.Equal(7, result.TotalSalesCount);
+        Assert.Equal(2, result.Categories.Count);
+        
+        var freeCategory = result.Categories.Single(c => c.CategoryId == "FREE");
+        Assert.Equal(0m, freeCategory.Revenue);
+        Assert.Equal(0m, freeCategory.RevenuePercent);
+        Assert.Equal(2, freeCategory.SalesCount);
+    }
+
+    [Fact]
+    public async Task Multiple_Categories_With_Total_Revenue_Zero_Produces_Zero_Percent()
+    {
+        var result = await RunAsync(
+            new AdminCategorySalesRow("CATS", "Cats", 0m, 5),
+            new AdminCategorySalesRow("DOGS", "Dogs", 0m, 2));
+
+        Assert.Equal(0m, result.TotalRevenue);
+        Assert.Equal(7, result.TotalSalesCount);
+        Assert.Equal(2, result.Categories.Count);
+        Assert.All(result.Categories, c => Assert.Equal(0m, c.RevenuePercent));
+    }
 }

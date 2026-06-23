@@ -347,4 +347,103 @@ public sealed class AdminSalesAnalyticsApiContractTests(PetstoreCatalogTestsFixt
         }
         return itemsList;
     }
+
+    [Fact]
+    public async Task Analytics_Retrieval_Is_Read_Only_And_Does_Not_Mutate_Database()
+    {
+        using var factory = new CatalogApiFactory(Fixture.ConnectionString);
+        using var customer = await SignInClientAsync(factory, "j2ee", "j2ee");
+        using var admin = await SignInClientAsync(factory, "admin", "admin");
+
+        var (fishItem, _) = await FirstItemOfCategoryAsync(customer, "FISH");
+        await PlaceOrderAsync(customer, fishItem, 2);
+
+        // Capture database state before calling analytics
+        int initialOrdersCount;
+        int initialOrderLinesCount;
+        int initialCategoriesCount;
+        int initialItemsCount;
+        var initialInventory = new List<(string ItemId, int Quantity)>();
+
+        await using (var context = Fixture.CreateContext())
+        {
+            initialOrdersCount = await context.Orders.CountAsync();
+            initialOrderLinesCount = await context.OrderLines.CountAsync();
+            initialCategoriesCount = await context.Categories.CountAsync();
+            initialItemsCount = await context.Items.CountAsync();
+            
+            var inventoryList = await context.SupplierInventory
+                .OrderBy(inv => inv.ItemId)
+                .Select(inv => new { inv.ItemId, inv.QuantityOnHand })
+                .AsNoTracking()
+                .ToListAsync();
+            initialInventory = inventoryList.Select(inv => (inv.ItemId, inv.QuantityOnHand)).ToList();
+        }
+
+        // Call the analytics endpoint
+        var analyticsResponse = await admin.GetAsync($"/api/admin/analytics/sales?{Range}");
+        Assert.Equal(HttpStatusCode.OK, analyticsResponse.StatusCode);
+
+        // Verify database state after calling analytics is unchanged
+        await using (var context = Fixture.CreateContext())
+        {
+            Assert.Equal(initialOrdersCount, await context.Orders.CountAsync());
+            Assert.Equal(initialOrderLinesCount, await context.OrderLines.CountAsync());
+            Assert.Equal(initialCategoriesCount, await context.Categories.CountAsync());
+            Assert.Equal(initialItemsCount, await context.Items.CountAsync());
+            
+            var currentInventoryList = await context.SupplierInventory
+                .OrderBy(inv => inv.ItemId)
+                .Select(inv => new { inv.ItemId, inv.QuantityOnHand })
+                .AsNoTracking()
+                .ToListAsync();
+            var currentInventory = currentInventoryList.Select(inv => (inv.ItemId, inv.QuantityOnHand)).ToList();
+
+            Assert.Equal(initialInventory, currentInventory);
+        }
+    }
+
+    [Fact]
+    public async Task Date_Filtering_Boundary_Conditions()
+    {
+        using var factory = new CatalogApiFactory(Fixture.ConnectionString);
+        using var customer = await SignInClientAsync(factory, "j2ee", "j2ee");
+        using var admin = await SignInClientAsync(factory, "admin", "admin");
+
+        var (fishItem, _) = await FirstItemOfCategoryAsync(customer, "FISH");
+
+        var o1 = await PlaceOrderAsync(customer, fishItem, 1);
+        var o2 = await PlaceOrderAsync(customer, fishItem, 1);
+        var o3 = await PlaceOrderAsync(customer, fishItem, 1);
+
+        // Update the database records directly with exact boundary PlacedAt values
+        await using (var context = Fixture.CreateContext())
+        {
+            await context.Orders
+                .Where(o => o.Id == int.Parse(o1.OrderId))
+                .ExecuteUpdateAsync(setters => setters.SetProperty(
+                    o => o.PlacedAt,
+                    new DateTime(2026, 6, 15, 0, 0, 0, DateTimeKind.Utc)));
+
+            await context.Orders
+                .Where(o => o.Id == int.Parse(o2.OrderId))
+                .ExecuteUpdateAsync(setters => setters.SetProperty(
+                    o => o.PlacedAt,
+                    new DateTime(2026, 6, 16, 0, 0, 0, DateTimeKind.Utc)));
+
+            await context.Orders
+                .Where(o => o.Id == int.Parse(o3.OrderId))
+                .ExecuteUpdateAsync(setters => setters.SetProperty(
+                    o => o.PlacedAt,
+                    new DateTime(2026, 6, 15, 23, 59, 59, DateTimeKind.Utc)));
+        }
+
+        // Request single-day analytics for 2026-06-15
+        var analytics = await admin.GetFromJsonAsync<AdminSalesAnalyticsDto>(
+            "/api/admin/analytics/sales?startDate=2026-06-15&endDate=2026-06-15");
+
+        Assert.NotNull(analytics);
+        // Should include o1 and o3 but exclude o2
+        Assert.Equal(2, analytics.TotalSalesCount);
+    }
 }
